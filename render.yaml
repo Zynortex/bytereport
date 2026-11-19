@@ -7,7 +7,7 @@ services:
     name: bytereport-api
     runtime: python
     plan: free
-    region: frankfurt
+    region: singapore
     branch: main
     # The API reads design-tokens.json, pricing.json, report-copy.json and
     # report-blocks.json from the repository root, so commands run from the
