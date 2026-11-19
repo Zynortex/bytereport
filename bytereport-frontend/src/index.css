@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+/* ── Brand design tokens → generates bg-brand-*, text-brand-*, border-brand-* ── */
+@theme {
+  /* ── Design language ──────────────────────────────────────────────────────
+     Values mirror /design-tokens.json, which the PDF pipeline also reads.
+     Change a colour there and in this block together.
+     Dark ground, hairline borders, ONE accent used only for strokes, rules and
+     CTA text — never as a large fill, never lightened into a pastel.        */
+  /* NAMING RULE: a colour token may never reuse a name from another Tailwind
+     namespace. This block once declared `--color-base`, which silently
+     redefined `text-base` from a FONT SIZE into `color: #121016` — every
+     `text-base` element painted its text in the app ground and vanished. The
+     ground is `--color-ground` for that reason; keep colour names off the
+     font-size scale (xs/sm/base/lg/xl/…).                                    */
+  --color-ground:      #121016;   /* app ground        */
+  --color-header:      #0D0B11;   /* topbar / sidebar  */
+  --color-line:        #241F2B;   /* every 1px border  */
+  --color-accent:      #6B5482;   /* strokes, rules, hairlines               */
+  /* Accent as TEXT. #6B5482 on the ground is 2.97:1 — below AA for the 12px
+     uppercase button labels it was used on. Lifted to 4.94:1 while keeping the
+     hue at 270°, so it still reads as the accent and not as a pastel. Same
+     base/-fg split as the severity scale below. */
+  --color-accent-fg:   #9478B0;
+  --color-fg:          #F1EEF3;   /* numbers, headings */
+  --color-fg-muted:    #736C7E;
+  --color-fg-subtle:   #8C8494;
+
+  /* Legacy token names, repointed to the dark language so the ~300 existing
+     class usages flip without touching every component. `brand-dark` now means
+     "primary text on a dark ground" — the eight places that used it as a
+     BACKGROUND were moved to bg-header explicitly.                          */
+  --color-brand-dark:   #F1EEF3;
+  --color-brand-light:  #121016;
+  --color-brand-border: #241F2B;
+  --color-brand-muted:  #8C8494;
+  --color-brand-blue:   #6B5482;
+
+  /* Charts — the shared ramp from design-tokens.json */
+  --color-chart-revenue:  #3E5578;
+  --color-chart-expenses: #6B5F55;
+  --color-chart-profit:   #6B5482;
+  --color-chart-gap:      #8B5A50;
+
+  /* Severity: the only place a semantic hue is justified. Muted.
+     The -fg variants are lifted so the label stays legible as TEXT on the dark
+     ground; the base hues are for hairlines and low-alpha tints only. */
+  --color-sev-high:      #7A2E35;
+  --color-sev-medium:    #7A5A2E;
+  --color-sev-low:       #4A5560;
+  --color-sev-high-fg:   #C98A90;
+  --color-sev-medium-fg: #C7A56B;
+  --color-sev-low-fg:    #98A4B0;
+
+  /* Health Score zones, muted to the same loudness as everything else. These
+     mirror design-tokens.json → zones; scoreColor() reads that file directly.
+     PulseLine's positive/negative segments share these tokens deliberately. */
+  --color-success:      #3E6B52;   /* excellent */
+  --color-success-pale: #1A2320;
+  --color-warning:      #7A5A28;   /* unstable  */
+  --color-warning-pale: #241E16;
+  --color-danger:       #7A2E2E;   /* critical  */
+  --color-danger-pale:  #241819;
+  --color-zone-stable:  #5A6B3E;
+
+  /* Cards carry no fill — a hairline is the only edge. Shadows would read as
+     a light-theme convention on this ground, so they are removed. */
+  --shadow-card:       none;
+  --shadow-card-hover: none;
+
+  /* 3px everywhere. Every rounded-* utility collapses to the same radius, which
+     is what removes the capsule badges and circular rings the old look leaned
+     on — those read as gamification, not as a finance tool. */
+  --radius-xs:   3px;
+  --radius-sm:   3px;
+  --radius-md:   3px;
+  --radius-lg:   3px;
+  --radius-xl:   3px;
+  --radius-2xl:  3px;
+  --radius-3xl:  3px;
+  --radius-4xl:  3px;
+  --radius-full: 3px;
+
+  --font-heading: "Golos Text", system-ui, sans-serif;
+  --font-sans:    "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono:    ui-monospace, "SF Mono", "IBM Plex Mono", "Roboto Mono", monospace;
+}
+
+
+/* ── Motion & effect tokens ─────────────────────────────────────────────────
+   Mirrors design-tokens.json → motion / effects (a test pins the two). CSS
+   reads these; the Motion library reads the JSON through lib/motionTokens.ts. */
+:root {
+  --dur-hover: 200ms;
+  --dur-press: 150ms;
+  --press-scale: 0.98;
+  --fx-glow: rgba(107, 84, 130, 0.11);
+  --fx-grid: rgba(241, 238, 243, 0.04);
+  --fx-grid-size: 48px;
+  --fx-spotlight: rgba(148, 120, 176, 0.55);
+  --fx-spotlight-r: 200px;
+}
+
+/* tabular-nums for all financial number displays */
+.tabular { font-variant-numeric: tabular-nums; }
+/* mono font + tabular-nums for currency/score numbers */
+.mono-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* Display type: Golos Text 700 with tightened tracking. Large sizes only —
+   at hero scale the default tracking reads as "a bigger body font". */
+.text-display {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Score numerals: display face + tabular figures so digits don't jitter
+   while the count-up animation runs. */
+.text-score {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Uppercase caption/label: sans, wide tracking, never 700+. */
+.label-caps {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── CSS variables (used by shadcn-style components) ── */
+@layer base {
+  :root {
+    --radius: 3px;
+    --background: 260 12% 8%;
+    --foreground: 280 18% 94%;
+    --muted: 267 15% 14%;
+    --muted-foreground: 268 8% 55%;
+    --border: 268 16% 15%;
+    --ring: 275 22% 42%;
+    --primary: 275 22% 42%;
+    --primary-foreground: 280 18% 94%;
+    --secondary: 267 15% 14%;
+    --secondary-foreground: 280 18% 94%;
+    --destructive: 353 45% 33%;
+    --destructive-foreground: 280 18% 94%;
+    --card: 260 12% 8%;
+    --card-foreground: 280 18% 94%;
+    --accent: 267 15% 14%;
+    --accent-foreground: 280 18% 94%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   Restraint is the point. Everything here is fade plus a few pixels of travel
+   or a fraction of scale, 150-260ms, ease-out — no bounce, no overshoot. An
+   element may move toward its resting state; it may never pass it and come
+   back. That single rule is what separates this from the playful look that was
+   deliberately removed: 0.97 -> 1 settles, 1 -> 1.05 -> 1 performs.
+   Every animation below is switched off wholesale under reduced-motion at the
+   bottom of this block.                                                     */
+
+@keyframes br-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes br-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes br-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes br-slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes br-slide-out-right {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(16px); }
+}
+/* The mobile navigation drawer: the chat panel's motion, mirrored to the left
+   edge it comes from. Same distance, same timing — one overlay language. */
+@keyframes br-slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes br-slide-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-16px); }
+}
+/* Overlays that appear in place (modal, dropdown, popover) rather than sliding
+   in from an edge. The scale runs 0.97 -> 1 and stops: it settles INTO its
+   size, it never passes 1 and springs back. That distinction is the whole
+   difference between "the surface arrived" and the cartoon register. */
+@keyframes br-pop-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes br-pop-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.97); }
+}
+/* Typing dots: opacity only. The previous indicator used Tailwind's
+   `animate-bounce`, which is exactly the springy motion this language rules
+   out — it just happened to be small enough to go unnoticed. */
+@keyframes br-dot {
+  0%, 60%, 100% { opacity: 0.25; }
+  30%           { opacity: 0.9; }
+}
+/* The welcome card travels further than in-flow content (14px vs 6px): it
+   arrives from outside the reading flow, so it needs enough movement to be
+   noticed in peripheral vision without demanding the eye. */
+@keyframes br-welcome-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes br-welcome-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(8px); }
+}
+@keyframes br-skeleton {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.8; }
+}
+
+.anim-fade-in    { animation: br-fade-in 200ms ease-out both; }
+.anim-fade-out   { animation: br-fade-out 150ms ease-out both; }
+.anim-fade-up    { animation: br-fade-up 220ms ease-out both; }
+.anim-panel-in   { animation: br-slide-in-right 220ms ease-out both; }
+.anim-panel-out  { animation: br-slide-out-right 180ms ease-out both; }
+.anim-drawer-in  { animation: br-slide-in-left 220ms ease-out both; }
+.anim-drawer-out { animation: br-slide-out-left 180ms ease-out both; }
+.anim-pop-in     { animation: br-pop-in 180ms ease-out both; }
+.anim-pop-out    { animation: br-pop-out 150ms ease-out both; }
+.anim-dot        { animation: br-dot 1.2s ease-in-out infinite; }
+/* Route change. Content only — the shell around it must not blink, or every
+   sidebar click would redraw the whole window.
+
+   OPACITY ONLY, and that is load-bearing. This class sits on a wrapper around
+   the whole page, and a transformed element becomes the containing block for
+   every `position: fixed` descendant. With `both` fill the final
+   `translateY(0)` never becomes `none`, so the effect is permanent: the chat
+   panel, the floating AI-CFO button, the modal backdrop and the welcome card
+   all detached from the viewport and rode the page scroll. Opacity creates a
+   stacking context but NOT a containing block, so a fade is safe here. */
+.anim-route      { animation: br-fade-in 200ms ease-out both; }
+/* The welcome card waits out the page load before it appears. */
+.anim-welcome-in  { animation: br-welcome-in 240ms ease-out both; }
+.anim-welcome-out { animation: br-welcome-out 180ms ease-out both; }
+
+/* A surface playing its exit is already gone as far as the user is concerned;
+   it must not still swallow clicks on its way out. */
+.anim-panel-out, .anim-pop-out, .anim-welcome-out, .anim-fade-out, .anim-drawer-out { pointer-events: none; }
+
+/* Skeleton block: a hairline-bordered ground that breathes, so a loading page
+   already has the shape of the page that is coming. */
+.skeleton {
+  background-color: var(--color-line);
+  border-radius: 3px;
+  animation: br-skeleton 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-in, .anim-fade-up, .anim-panel-in, .anim-panel-out,
+  .anim-drawer-in, .anim-drawer-out,
+  .anim-fade-out, .anim-pop-in, .anim-pop-out, .anim-route,
+  .anim-welcome-in, .anim-welcome-out,
+  .anim-dot, .skeleton {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  /* Hover/focus colour transitions are harmless, but a user who asked for no
+     motion gets none of it. */
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+
+/* Spotlight on a card frame (SpotlightCard): a radial highlight at the
+   pointer, masked to a 1px ring so it lights the border and never the
+   surface. Colour and radius are the --fx-* tokens. */
+.spotlight-frame {
+  padding: 1px;
+  background: radial-gradient(var(--fx-spotlight-r) circle at var(--x, 50%) var(--y, 50%), var(--fx-spotlight), transparent 70%);
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(black 0 0) content-box exclude, linear-gradient(black 0 0);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2E2836; border-radius: 3px; }

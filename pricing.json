@@ -1,0 +1,10 @@
+{
+  "_comment": "Single source for every number the pricing page promises and the backend enforces. Read by bytereport/app/services/pricing.py and bytereport-frontend/src/lib/pricing.ts. Plan names and descriptions are translated in the locale files; only numbers live here.",
+  "currency": "UZS",
+  "free_reports_on_signup": 3,
+  "plans": [
+    { "id": "free",       "price": 0,      "reports": 3,  "period": "once" },
+    { "id": "owner",      "price": 150000, "reports": 5,  "period": "none" },
+    { "id": "accountant", "price": 450000, "reports": 25, "period": "month" }
+  ]
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- bg_header from design-tokens.json: the phone's browser chrome matches the app's top bar. -->
+    <meta name="theme-color" content="#0D0B11" />
+    <title>ByteReport — AI-финансовый аналитик для малого бизнеса</title>
+    <meta name="description" content="Загрузите выписку из банка или 1С — ByteReport посчитает показатели и подготовит отчёт: Health Score, риски, аномалии и прогноз денежного потока." />
+
+    <!-- Link previews (Telegram, WhatsApp, Facebook, X). Crawlers do not run
+         JavaScript, so these are static. __SITE_URL__ is filled in at build
+         time (vite.config.ts), and the build writes a /demo copy of this file
+         with the demo report's own title, description and image. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ByteReport" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:title" content="ByteReport — отчёт по вашей выписке за минуту" />
+    <meta property="og:description" content="Выписка из банка или 1С → Health Score, риски, аномалии и прогноз денежного потока. AI-финансовый аналитик для малого бизнеса." />
+    <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ByteReport — отчёт по вашей выписке за минуту" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

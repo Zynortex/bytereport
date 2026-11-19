@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- The app's logo mark: header ground, accent hairline frame, the bar-chart
+       glyph. Colours are design tokens (bg_header #0D0B11, accent #6B5482,
+       accent-fg #9478B0); radius is the 3px of everything else. -->
+  <rect x="1" y="1" width="30" height="30" rx="3" fill="#0D0B11" stroke="#6B5482" stroke-width="2"/>
+  <path d="M22 23V13M16 23V8M10 23V17" stroke="#9478B0" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

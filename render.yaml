@@ -1,0 +1,48 @@
+# Render Blueprint: the ByteReport API on the free plan.
+# Render → New → Blueprint → this repository. Values marked `sync: false` are
+# asked for on the first deploy and live only in Render, never in git.
+# Step by step: DEPLOY.md.
+services:
+  - type: web
+    name: bytereport-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    branch: main
+    # The API reads design-tokens.json, pricing.json, report-copy.json and
+    # report-blocks.json from the repository root, so commands run from the
+    # root and the server starts inside bytereport/.
+    buildCommand: pip install -r bytereport/requirements.txt
+    startCommand: cd bytereport && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - bytereport/**
+        - "*.json"
+        - render.yaml
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      # CORS lets in only ALLOWED_ORIGINS (no "any localhost port" as in development).
+      - key: ENVIRONMENT
+        value: production
+      - key: AI_PROVIDER
+        value: openai
+      # The key of the OpenAI project "bytereport-prod" (hard limit $5).
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      # The Vercel address, e.g. https://bytereport.vercel.app (no trailing slash).
+      - key: ALLOWED_ORIGINS
+        sync: false
+      # Your own sign-in emails, comma-separated: never charged.
+      - key: UNLIMITED_REPORT_EMAILS
+        sync: false

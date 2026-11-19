@@ -1,0 +1,20 @@
+{
+  "_comment": "The report's sections, in default order. Read by app/services/report_layout.py and imported by src/lib/reportBlocks.ts. A layout is an ordering of these ids plus a visible flag per id; both surfaces render from the same layout, which is the whole point — an accountant arranges the report once and the PDF is that arrangement. Array order here is the default order on BOTH surfaces.",
+  "blocks": [
+    { "id": "health_score",         "kind": "text",    "label": { "ru": "Health Score",                  "uz": "Health Score",                    "en": "Health Score" } },
+    { "id": "executive_summary",    "kind": "text",    "label": { "ru": "Резюме",                        "uz": "Хулоса",                          "en": "Executive summary" } },
+    { "id": "kpi_strip",            "kind": "metrics", "label": { "ru": "Ключевые показатели",           "uz": "Асосий кўрсаткичлар",             "en": "Key figures" },            "pdf": false },
+    { "id": "chart_monthly",        "kind": "chart",   "label": { "ru": "График: выручка и расходы",     "uz": "График: тушум ва харажатлар",     "en": "Chart: revenue and expenses" } },
+    { "id": "chart_categories",     "kind": "chart",   "label": { "ru": "График: расходы по категориям", "uz": "График: харажат категориялари",   "en": "Chart: expenses by category" } },
+    { "id": "chart_growth",         "kind": "chart",   "label": { "ru": "График: рост месяц к месяцу",   "uz": "График: ойма-ой ўсиш",            "en": "Chart: month-over-month growth" } },
+    { "id": "chart_forecast",       "kind": "chart",   "label": { "ru": "Прогноз кассового разрыва",     "uz": "Касса узилиши прогнози",          "en": "Cash-gap forecast" } },
+    { "id": "key_insights",         "kind": "list",    "label": { "ru": "Ключевые инсайты",              "uz": "Асосий хулосалар",                "en": "Key insights" },           "items": "key_insights" },
+    { "id": "top_risks",            "kind": "list",    "label": { "ru": "Топ рисков",                    "uz": "Асосий хавфлар",                  "en": "Top risks" },              "items": "top_risks" },
+    { "id": "anomalies",            "kind": "list",    "label": { "ru": "Аномалии",                      "uz": "Аномалиялар",                     "en": "Anomalies" },              "items": "anomalies" },
+    { "id": "expense_analysis",     "kind": "text",    "label": { "ru": "Анализ расходов",               "uz": "Харажатлар таҳлили",              "en": "Expense analysis" } },
+    { "id": "growth_opportunities", "kind": "list",    "label": { "ru": "Возможности роста",             "uz": "Ўсиш имкониятлари",               "en": "Growth opportunities" },   "items": "growth_opportunities" },
+    { "id": "priority_actions",     "kind": "list",    "label": { "ru": "Приоритетные действия",         "uz": "Устувор чоралар",                 "en": "Priority actions" },       "items": "priority_actions" },
+    { "id": "cash_flow_analysis",   "kind": "text",    "label": { "ru": "Анализ денежного потока",       "uz": "Пул оқими таҳлили",               "en": "Cash flow analysis" } },
+    { "id": "forecast",             "kind": "text",    "label": { "ru": "Прогноз",                       "uz": "Прогноз",                         "en": "Forecast" } }
+  ]
+}

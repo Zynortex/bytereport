@@ -1,0 +1,29 @@
+# Playwright MCP snapshots, console logs and screenshots (local tooling, never commit)
+.playwright-mcp/
+
+# Local Claude Code settings: saved permission rules can quote keys and URLs.
+.claude/settings.local.json
+.claude/launch.json
+
+# ── Secrets ──────────────────────────────────────────────────────────────────
+# Real values live on disk and in the host's environment settings, never in
+# git. The *.example files list the names.
+.env
+.env.*
+!.env.example
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.pytest_cache/
+venv/
+.venv/
+
+# ── Backend runtime output ───────────────────────────────────────────────────
+bytereport/logs/
+bytereport/uploads/
+
+# ── Frontend build output ────────────────────────────────────────────────────
+node_modules/
+bytereport-frontend/dist/
+*.tsbuildinfo

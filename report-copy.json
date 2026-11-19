@@ -1,0 +1,173 @@
+{
+  "_comment": "Reader-facing copy shared by the web app and the PDF. Loaded by app/services/report_copy.py and merged into i18n by src/i18n.ts. One source, so the two surfaces cannot say different things about what the analysis is.",
+  "score": {
+    "_comment": "The Health Score is a signal from cash movement in a bank statement. It cannot see receivables and payables, cash outside the account, or accruals. That is the scope of any statement-based tool, not a defect — but a score presented without it reads as an audit verdict. `caption` sits under the number; `scope` sits beside it. Neither apologises: they describe coverage.",
+    "caption": {
+      "ru": "По движению денег в выписке за период",
+      "uz": "Давр учун кўчирмадаги пул ҳаракати бўйича",
+      "en": "Based on cash movement in the statement for the period"
+    },
+    "scope": {
+      "ru": "Быстрый сигнал по денежному потоку из выписки — не замена полному бухучёту. Не учитывает дебиторскую и кредиторскую задолженность, наличные операции вне счёта и будущие обязательства.",
+      "uz": "Кўчирмадаги пул оқими бўйича тезкор сигнал — тўлиқ бухгалтерия ҳисобининг ўрнини босмайди. Дебиторлик ва кредиторлик қарздорлик, ҳисобдан ташқари нақд операциялар ва келажакдаги мажбуриятлар ҳисобга олинмайди.",
+      "en": "A quick signal from the cash flow in your statement — not a substitute for full bookkeeping. It does not see receivables and payables, cash transactions outside the account, or future obligations."
+    },
+    "scope_title": {
+      "ru": "Что охватывает анализ",
+      "uz": "Таҳлил нимани қамраб олади",
+      "en": "What this analysis covers"
+    }
+  },
+  "cash_forecast": {
+    "_comment": "The cash forecast says only what the data supports. Without the account balance at the end of the period there is no date or amount of a shortfall — only the trend of weekly net flow. Read by the web report, the PDF and the AI text guard.",
+    "title_balance": {
+      "ru": "Прогноз остатка на счёте по неделям",
+      "uz": "Ҳафталар бўйича ҳисобдаги қолдиқ прогнози",
+      "en": "Weekly account balance forecast"
+    },
+    "title_trend": {
+      "ru": "Чистый поток по неделям — тренд",
+      "uz": "Ҳафталар бўйича соф пул оқими — тенденция",
+      "en": "Weekly net cash flow — trend"
+    },
+    "needs_balance": {
+      "ru": "Остаток на счёте не указан, поэтому дата и сумма возможной нехватки денег не рассчитываются. Показан тренд чистого потока: поступления минус платежи за неделю.",
+      "uz": "Ҳисобдаги қолдиқ кўрсатилмаган, шунинг учун пул етишмаслигининг санаси ва суммаси ҳисобланмайди. Соф пул оқимининг тенденцияси кўрсатилган: ҳафталик тушумлар минус тўловлар.",
+      "en": "No account balance was given, so no date or amount of a possible shortfall is calculated. Shown is the trend of net flow: money in minus money out per week."
+    },
+    "needs_balance_action": {
+      "ru": "Укажите остаток на счёте на конец периода, чтобы увидеть прогноз остатка.",
+      "uz": "Қолдиқ прогнозини кўриш учун давр охиридаги ҳисобдаги қолдиқни киритинг.",
+      "en": "Enter the account balance at the end of the period to see a balance forecast."
+    },
+    "from_balance": {
+      "ru": "Расчёт от остатка на счёте на конец периода: {amount}.",
+      "uz": "Ҳисоб-китоб давр охиридаги ҳисобдаги қолдиқдан: {amount}.",
+      "en": "Calculated from the account balance at the end of the period: {amount}."
+    },
+    "ai_fallback": {
+      "ru": "Остаток на счёте не указан, поэтому прогноз нехватки денег по датам и суммам не строится. Тренд чистого потока по неделям — в разделе прогноза денежного потока.",
+      "uz": "Ҳисобдаги қолдиқ кўрсатилмаган, шунинг учун пул етишмаслигининг сана ва сумма бўйича прогнози тузилмайди. Ҳафталик соф пул оқими тенденцияси — пул оқими прогнози бўлимида.",
+      "en": "No account balance was given, so no shortfall is forecast by date or amount. The weekly net-flow trend is in the cash flow forecast section."
+    },
+    "engine_gap": {
+      "ru": "По расчёту прогноза остаток на счёте уйдёт в минус {date}: не хватит {amount}.",
+      "uz": "Прогноз ҳисобига кўра ҳисобдаги қолдиқ {date} манфийга ўтади: {amount} етишмайди.",
+      "en": "By the forecast's calculation the account balance goes negative on {date}: short by {amount}."
+    },
+    "engine_no_gap": {
+      "ru": "По расчёту прогноза остаток на счёте не уходит в минус в ближайшие 4 недели.",
+      "uz": "Прогноз ҳисобига кўра яқин 4 ҳафтада ҳисобдаги қолдиқ манфийга ўтмайди.",
+      "en": "By the forecast's calculation the account balance does not go negative in the next 4 weeks."
+    }
+  },
+  "score_breakdown": {
+    "_comment": "One sentence per Health Score check, filled with the engine's own numbers (financial_engine.health_score_breakdown). The AI never writes these. Placeholders: {margin} {threshold} {weeks} {change} {amount} {pct} {score}.",
+    "title": {
+      "ru": "Из чего сложился балл",
+      "uz": "Балл нимадан ташкил топди",
+      "en": "How the score was built"
+    },
+    "intro": {
+      "ru": "Старт — 100 баллов, пять проверок по выписке. Итог — {score}.",
+      "uz": "Бошланиш — 100 балл, кўчирма бўйича бешта текширув. Якун — {score}.",
+      "en": "Starts at 100; five checks on the statement. Result: {score}."
+    },
+    "margin_negative": {
+      "ru": "Операционная маржа {margin}%: расходы больше выручки.",
+      "uz": "Операцион маржа {margin}%: харажатлар тушумдан кўп.",
+      "en": "Operating margin {margin}%: expenses exceed revenue."
+    },
+    "margin_below": {
+      "ru": "Операционная маржа {margin}% — ниже {threshold}%.",
+      "uz": "Операцион маржа {margin}% — {threshold}% дан паст.",
+      "en": "Operating margin {margin}% — below {threshold}%."
+    },
+    "margin_ok": {
+      "ru": "Операционная маржа {margin}% — 30% и выше.",
+      "uz": "Операцион маржа {margin}% — 30% ва ундан юқори.",
+      "en": "Operating margin {margin}% — 30% or more."
+    },
+    "cash_gaps_some": {
+      "ru": "Недель, где платежи превысили поступления: {weeks}.",
+      "uz": "Тўловлар тушумдан ошган ҳафталар: {weeks}.",
+      "en": "Weeks where payments exceeded receipts: {weeks}."
+    },
+    "cash_gaps_none": {
+      "ru": "Ни одной недели, где платежи превысили поступления.",
+      "uz": "Тўловлар тушумдан ошган бирорта ҳафта йўқ.",
+      "en": "No week where payments exceeded receipts."
+    },
+    "revenue_trend_down": {
+      "ru": "Выручка последнего месяца {change}% к предыдущему.",
+      "uz": "Охирги ой тушуми олдингисига нисбатан {change}%.",
+      "en": "Last month's revenue {change}% vs the month before."
+    },
+    "revenue_trend_up": {
+      "ru": "Выручка последнего месяца {change}% к предыдущему — рост больше 10%.",
+      "uz": "Охирги ой тушуми олдингисига нисбатан {change}% — ўсиш 10% дан юқори.",
+      "en": "Last month's revenue {change}% vs the month before — growth above 10%."
+    },
+    "revenue_trend_flat": {
+      "ru": "Выручка последнего месяца {change}% к предыдущему — без существенных изменений.",
+      "uz": "Охирги ой тушуми олдингисига нисбатан {change}% — сезиларли ўзгаришсиз.",
+      "en": "Last month's revenue {change}% vs the month before — no significant change."
+    },
+    "revenue_trend_na": {
+      "ru": "Меньше двух месяцев данных — тренд выручки не оценивается.",
+      "uz": "Маълумот икки ойдан кам — тушум тенденцияси баҳоланмайди.",
+      "en": "Less than two months of data — the revenue trend is not assessed."
+    },
+    "tax_limit_over": {
+      "ru": "Годовой оборот по текущему темпу — {amount}: больше 80% лимита упрощённого налога (1 млрд сум).",
+      "uz": "Жорий суръатда йиллик айланма — {amount}: соддалаштирилган солиқ лимитининг (1 млрд сўм) 80% идан кўп.",
+      "en": "Annual turnover at the current pace — {amount}: above 80% of the simplified-tax limit (1 bn UZS)."
+    },
+    "tax_limit_ok": {
+      "ru": "Годовой оборот по текущему темпу — {amount}: в пределах 80% лимита упрощённого налога.",
+      "uz": "Жорий суръатда йиллик айланма — {amount}: соддалаштирилган солиқ лимитининг 80% и доирасида.",
+      "en": "Annual turnover at the current pace — {amount}: within 80% of the simplified-tax limit."
+    },
+    "volatility_high": {
+      "ru": "Самый дорогой по расходам месяц — на {pct}% выше среднего.",
+      "uz": "Энг кўп харажатли ой — ўртачадан {pct}% юқори.",
+      "en": "The costliest month was {pct}% above the monthly average."
+    },
+    "volatility_ok": {
+      "ru": "Расходы по месяцам ровные: максимум на {pct}% выше среднего.",
+      "uz": "Ойлик харажатлар бир текис: энг юқориси ўртачадан {pct}% юқори.",
+      "en": "Monthly expenses are steady: the highest was {pct}% above average."
+    },
+    "volatility_na": {
+      "ru": "Один месяц данных — колебания расходов не оцениваются.",
+      "uz": "Бир ойлик маълумот — харажатлар тебраниши баҳоланмайди.",
+      "en": "One month of data — expense swings are not assessed."
+    },
+    "capped": {
+      "ru": "Итог удержан в пределах шкалы 0–100.",
+      "uz": "Якун 0–100 шкаласи доирасида сақланди.",
+      "en": "The result is held within the 0–100 scale."
+    }
+  },
+  "credits_exhausted": {
+    "_comment": "Shown when the report balance is zero: in the API's 402 and on the upload page. 'paid' when the account has ever been granted reports by hand (credit_events kind=grant), otherwise 'free'. No pricing link and no contact: sales are in person for now.",
+    "free": {
+      "ru": "Бесплатные отчёты закончились.",
+      "uz": "Бепул ҳисоботлар тугади.",
+      "en": "Your free reports are used up."
+    },
+    "paid": {
+      "ru": "Отчёты в пакете закончились.",
+      "uz": "Пакетдаги ҳисоботлар тугади.",
+      "en": "The reports in your package are used up."
+    }
+  },
+  "upload_errors": {
+    "_comment": "Upload rejections the API words in the caller's language (Accept-Language). {pages} and {limit} are filled by the route; the limit is pdf_statement.MAX_PAGES.",
+    "pdf_too_many_pages": {
+      "ru": "В PDF-выписке {pages} стр., а принимаем не больше {limit}. Разделите выписку на части до {limit} страниц (например, по месяцам) или выгрузите её из банк-клиента в Excel или CSV.",
+      "uz": "PDF кўчирмада {pages} саҳифа бор, биз эса кўпи билан {limit} саҳифа қабул қиламиз. Кўчирмани {limit} саҳифагача бўлган қисмларга бўлинг (масалан, ойлар бўйича) ёки банк-клиентдан Excel ёки CSV кўринишида юклаб олинг.",
+      "en": "This PDF statement has {pages} pages; the limit is {limit}. Split it into parts of up to {limit} pages (by month, for example) or export it from your bank as Excel or CSV."
+    }
+  }
+}

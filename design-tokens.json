@@ -1,0 +1,89 @@
+{
+  "_comment": "Single source of truth for the ByteReport design language. Read by the web app (src/index.css mirrors these, src/lib/chartTokens.ts imports them) and by the PDF pipeline (app/services/design_tokens.py). Change a value here and both surfaces follow.",
+  "theme": {
+    "bg_base": "#121016",
+    "bg_header": "#0D0B11",
+    "border_default": "#241F2B",
+    "accent": "#6B5482",
+    "text_primary": "#F1EEF3",
+    "text_muted": "#736C7E",
+    "text_subtle": "#8C8494",
+    "radius": "3px"
+  },
+  "charts": {
+    "_comment": "Shared by web and PDF. `categories` is a hue-varied palette: a purely monochrome ramp was indistinguishable past ~4 slices. Colours are assigned by category NAME (see assign_category_colors), not by sort position, so a category keeps its colour between reports.",
+    "ramp": [
+      "#1B2A40",
+      "#22314A",
+      "#2E4360",
+      "#3E5578",
+      "#527098",
+      "#6D8CAE",
+      "#8CA0BC",
+      "#B7C4D6"
+    ],
+    "series": {
+      "revenue": "#3E5578",
+      "expenses": "#6B5F55",
+      "profit": "#6B5482"
+    },
+    "cash_gap": "#8B5A50",
+    "categories": [
+      "#3E5578",
+      "#3E6B6B",
+      "#5A4569",
+      "#7A5A28",
+      "#7A4A3E",
+      "#5A6B3E",
+      "#6B6670"
+    ]
+  },
+  "severity": {
+    "_comment": "The one place a semantic (risk) colour is justified. Muted, but still separable - deliberately NOT part of the ramp above.",
+    "high": "#7A2E35",
+    "medium": "#7A5A2E",
+    "low": "#4A5560"
+  },
+  "zones": {
+    "_comment": "Health Score zones. Ordered critical -> excellent and muted to the same loudness as the severity scale: the score is the most important number on the page, but its colour must not outshout the interface. Read by pdf_generator._ZONE_COLORS and by scoreColor() on the web.",
+    "critical": "#7A2E2E",
+    "unstable": "#7A5A28",
+    "stable": "#5A6B3E",
+    "excellent": "#3E6B52"
+  },
+  "pdf": {
+    "_comment": "The printed page stays light - a normal convention for a document, unlike the dark web dashboard.",
+    "page_bg": "#FFFFFF",
+    "page_ink": "#1E293B",
+    "page_muted": "#5B6472",
+    "page_grid": "#E2E5EA",
+    "header_bg": "#0D0B11",
+    "table_header_bg": "#6B5482"
+  },
+  "motion": {
+    "_comment": "Motion on the web (Motion library + CSS). One curve, ease-out with no overshoot: every y in [0,1]. Hover/press 150-250 ms, blocks appear in 400-700 ms. Under prefers-reduced-motion only fades remain (MotionConfig reducedMotion='user') and count-ups show the final value at once.",
+    "ease": [
+      0.22,
+      1,
+      0.36,
+      1
+    ],
+    "hover_ms": 200,
+    "press_ms": 150,
+    "press_scale": 0.98,
+    "reveal_ms": 560,
+    "reveal_offset_px": 14,
+    "stagger_ms": 70,
+    "draw_ms": 1400,
+    "count_ms": 1200,
+    "hero_cycle_ms": 7000
+  },
+  "effects": {
+    "_comment": "Background and border effects. The only colour outside a stroke is the hero glow: accent #6B5482 at <= 12% opacity. The grid is primary text at 3-5%. No fills, no shadows, no glass.",
+    "glow": "rgba(107, 84, 130, 0.11)",
+    "grid_line": "rgba(241, 238, 243, 0.04)",
+    "grid_size_px": 48,
+    "spotlight": "rgba(148, 120, 176, 0.55)",
+    "spotlight_radius_px": 200
+  }
+}
