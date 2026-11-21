@@ -5,9 +5,9 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  // Buttons carry no fill: a 1px accent stroke and uppercase label. A solid
-  // accent block would be exactly the "large area of accent colour" the design
-  // language forbids.
+  // The primary button (the default variant: a CTA, "New analysis", sign-up)
+  // is the one solid accent fill on a page, with dark ink on it. Every other
+  // variant is a 1px stroke with an uppercase label.
   // The press settles to 0.98 (--press-scale) and back: it arrives, it never
   // overshoots. Hover brightens the frame. Durations are the --dur-* tokens
   // (design-tokens.json → motion); under reduced motion the global rule makes
@@ -16,10 +16,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Border keeps the base accent; the LABEL uses the lifted -fg variant.
-        // #6B5482 as 12px uppercase text was 2.97:1 on the ground — legible in
-        // a mockup, not on a real screen.
-        default:     "border border-accent bg-transparent text-accent-fg hover:bg-accent/12 hover:border-accent-fg active:bg-accent/25",
+        // Accent fill, accent-ink label (10.97:1); hover lifts to the soft accent.
+        default:     "border border-accent bg-accent text-accent-ink hover:bg-accent-soft hover:border-accent-soft active:bg-accent-soft",
         destructive: "border border-sev-high bg-transparent text-sev-high-fg hover:bg-sev-high/12 active:bg-sev-high/25",
         outline:     "border border-brand-border bg-transparent text-brand-dark hover:border-accent-fg hover:text-accent-fg active:bg-accent/15",
         secondary:   "border border-brand-border bg-transparent text-brand-muted hover:text-brand-dark hover:border-brand-muted active:bg-line/60",

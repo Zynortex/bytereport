@@ -92,3 +92,94 @@ def test_the_readme_test_count_is_current():
                          cwd=ROOT / "bytereport", capture_output=True, text=True, encoding="utf-8")
     collected = int(re.search(r"(\d+) tests? collected", out.stdout).group(1))
     assert stated == collected, f"README says {stated}, pytest collects {collected}"
+
+
+# ── tools/sync_public_repo.py ───────────────────────────────────────────────
+
+def _load_sync():
+    import importlib.util
+
+    tools = ROOT / "tools"
+    sys.path.insert(0, str(tools))
+    spec = importlib.util.spec_from_file_location("sync_public_repo", tools / "sync_public_repo.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _repo(path, files: dict):
+    path.mkdir(parents=True, exist_ok=True)
+    git = lambda *a: subprocess.run(["git", *a], cwd=path, check=True, capture_output=True)  # noqa: E731
+    git("init", "-q", "-b", "main")
+    for rel, text in files.items():
+        (path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (path / rel).write_text(text, encoding="utf-8")
+    git("add", "-A")
+    git("-c", "user.name=t", "-c", "user.email=t@example.com", "commit", "-q", "-m", "init")
+    return git
+
+
+def test_sync_mirrors_head_excludes_private_paths_and_commits_as_the_noreply_author(tmp_path):
+    sync = _load_sync()
+    _repo(tmp_path / "private", {
+        "README.md": "new readme\n", "app/main.py": "print('v2')\n",
+        "app/new.py": "x = 1\n", ".claude/settings.local.json": "{}\n",
+    })
+    pub_git = _repo(tmp_path / "public", {
+        "README.md": "old readme\n", "app/main.py": "print('v1')\n", "app/gone.py": "old\n",
+    })
+    s = sync.sync(tmp_path / "private", tmp_path / "public", sync.DEFAULT_AUTHOR, message="Sync")
+    assert s["added"] == ["app/new.py"]
+    assert sorted(s["changed"]) == ["README.md", "app/main.py"]
+    assert s["removed"] == ["app/gone.py"]
+    assert not (tmp_path / "public" / ".claude").exists()
+    log = pub_git("log", "-1", "--format=%an <%ae>|%cn <%ce>|%s").stdout.decode()
+    assert log.strip() == ("Azizbek <264824882+Zynortex@users.noreply.github.com>|"
+                           "Azizbek <264824882+Zynortex@users.noreply.github.com>|Sync")
+    assert pub_git("rev-list", "--count", "HEAD").stdout.decode().strip() == "2"
+
+
+def test_sync_stops_on_a_secret_and_touches_nothing(tmp_path):
+    sync = _load_sync()
+    key = "sk-proj-" + "Zz9" * 12
+    _repo(tmp_path / "private", {"config.py": f'KEY = "{key}"\n'})
+    pub_git = _repo(tmp_path / "public", {"config.py": "KEY = ''\n"})
+    import pytest as _pytest
+
+    with _pytest.raises(sync.SyncError) as exc:
+        sync.sync(tmp_path / "private", tmp_path / "public", sync.DEFAULT_AUTHOR)
+    assert key not in str(exc.value)
+    assert (tmp_path / "public" / "config.py").read_text(encoding="utf-8") == "KEY = ''\n"
+    assert pub_git("rev-list", "--count", "HEAD").stdout.decode().strip() == "1"
+
+
+def test_sync_will_not_overwrite_uncommitted_public_edits(tmp_path):
+    sync = _load_sync()
+    _repo(tmp_path / "private", {"a.txt": "private\n"})
+    _repo(tmp_path / "public", {"a.txt": "public\n"})
+    (tmp_path / "public" / "a.txt").write_text("edited by hand\n", encoding="utf-8")
+    import pytest as _pytest
+
+    with _pytest.raises(sync.SyncError):
+        sync.sync(tmp_path / "private", tmp_path / "public", sync.DEFAULT_AUTHOR)
+    assert (tmp_path / "public" / "a.txt").read_text(encoding="utf-8") == "edited by hand\n"
+
+
+def test_sync_dry_run_writes_nothing(tmp_path):
+    sync = _load_sync()
+    _repo(tmp_path / "private", {"a.txt": "new\n"})
+    _repo(tmp_path / "public", {"a.txt": "old\n"})
+    s = sync.sync(tmp_path / "private", tmp_path / "public", sync.DEFAULT_AUTHOR, dry_run=True)
+    assert s["changed"] == ["a.txt"] and s["commit"] is None
+    assert (tmp_path / "public" / "a.txt").read_text(encoding="utf-8") == "old\n"
+
+
+def test_sync_shares_the_exclusions_and_never_pushes():
+    src = _read("tools/sync_public_repo.py")
+    assert "from make_public_repo import EXCLUDE" in src
+    code = "\n".join(ln for ln in src.splitlines() if not ln.lstrip().startswith(("print(", "#")))
+    assert '"push"' not in code and "'push'" not in code
+
+
+def test_render_region_matches_the_public_repository():
+    assert "region: singapore" in _read("render.yaml")

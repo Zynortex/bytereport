@@ -276,14 +276,14 @@ export default function Dashboard() {
               <Link
                 key={card.title}
                 to={card.href}
-                className="relative bg-transparent border border-brand-border rounded-xl p-5 sm:p-6 text-left transition-colors duration-200 ease-out hover:border-accent"
+                className="relative bg-surface border border-brand-border rounded-xl p-5 sm:p-6 text-left transition-colors duration-200 ease-out hover:bg-surface-hover hover:border-line-strong"
               >
                 {inner}
               </Link>
             ) : (
               <div
                 key={card.title}
-                className="relative bg-transparent border border-brand-border rounded-xl p-5 sm:p-6 text-left"
+                className="relative bg-surface border border-brand-border rounded-xl p-5 sm:p-6 text-left"
               >
                 {inner}
               </div>

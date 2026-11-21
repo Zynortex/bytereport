@@ -2,69 +2,60 @@
 
 /* ── Brand design tokens → generates bg-brand-*, text-brand-*, border-brand-* ── */
 @theme {
-  /* ── Design language ──────────────────────────────────────────────────────
-     Values mirror /design-tokens.json, which the PDF pipeline also reads.
-     Change a colour there and in this block together.
-     Dark ground, hairline borders, ONE accent used only for strokes, rules and
-     CTA text — never as a large fill, never lightened into a pastel.        */
+  /* Design language ──────────────────────────────────────────────────────
+     Values mirror /design-tokens.json, which the PDF pipeline also reads; a
+     test pins every value below to the file. Change a colour there and here
+     together. The ByteForge palette: a dark navy ground, hairline borders and
+     ONE cyan accent. Accent fills are kept to the primary button; everything
+     else uses it for strokes, rules and text.                               */
   /* NAMING RULE: a colour token may never reuse a name from another Tailwind
      namespace. This block once declared `--color-base`, which silently
-     redefined `text-base` from a FONT SIZE into `color: #121016` — every
-     `text-base` element painted its text in the app ground and vanished. The
-     ground is `--color-ground` for that reason; keep colour names off the
-     font-size scale (xs/sm/base/lg/xl/…).                                    */
-  --color-ground:      #121016;   /* app ground        */
-  --color-header:      #0D0B11;   /* topbar / sidebar  */
-  --color-line:        #241F2B;   /* every 1px border  */
-  --color-accent:      #6B5482;   /* strokes, rules, hairlines               */
-  /* Accent as TEXT. #6B5482 on the ground is 2.97:1 — below AA for the 12px
-     uppercase button labels it was used on. Lifted to 4.94:1 while keeping the
-     hue at 270°, so it still reads as the accent and not as a pastel. Same
-     base/-fg split as the severity scale below. */
-  --color-accent-fg:   #9478B0;
-  --color-fg:          #F1EEF3;   /* numbers, headings */
-  --color-fg-muted:    #736C7E;
-  --color-fg-subtle:   #8C8494;
+     redefined `text-base` from a FONT SIZE into a colour — every `text-base`
+     element painted its text in the app ground and vanished. The ground is
+     `--color-ground` for that reason; keep colour names off the font-size
+     scale (xs/sm/base/lg/xl/…).                                             */
+  --color-ground:        #04060B;   /* app ground           */
+  --color-header:        #070B14;   /* topbar / sidebar     */
+  --color-surface:       #0A101C;   /* cards: a light fill  */
+  --color-surface-hover: #0E1524;   /* a card under the cursor */
+  --color-line:          rgb(148 172 205 / 0.11);   /* every 1px border */
+  --color-line-strong:   rgb(148 172 205 / 0.20);   /* hover / active border */
+  --color-accent:        #3DE6D6;   /* strokes, rules, the primary fill */
+  --color-accent-fg:     #3DE6D6;   /* the accent as text */
+  --color-accent-soft:   #8FF3E9;   /* hover on accent, highlights */
+  --color-accent-ink:    #04201D;   /* text ON an accent fill */
+  --color-ring:          #3DE6D6;   /* focus rings */
+  --color-fg:            #E8EEF6;   /* numbers, headings */
+  --color-fg-subtle:     #97A5B9;   /* secondary text */
+  --color-fg-muted:      #66758B;   /* captions, dim text */
+  --color-negative:      #FF7A6B;   /* errors, negative values */
 
-  /* Legacy token names, repointed to the dark language so the ~300 existing
-     class usages flip without touching every component. `brand-dark` now means
-     "primary text on a dark ground" — the eight places that used it as a
-     BACKGROUND were moved to bg-header explicitly.                          */
-  --color-brand-dark:   #F1EEF3;
-  --color-brand-light:  #121016;
-  --color-brand-border: #241F2B;
-  --color-brand-muted:  #8C8494;
-  --color-brand-blue:   #6B5482;
+  /* Legacy token names, repointed so the ~300 existing class usages follow the
+     palette without touching every component. `brand-dark` means "primary
+     text on a dark ground", `brand-blue` is the accent.                     */
+  --color-brand-dark:   #E8EEF6;
+  --color-brand-border: rgb(148 172 205 / 0.11);
+  --color-brand-muted:  #97A5B9;
+  --color-brand-blue:   #3DE6D6;
 
-  /* Charts — the shared ramp from design-tokens.json */
-  --color-chart-revenue:  #3E5578;
-  --color-chart-expenses: #6B5F55;
-  --color-chart-profit:   #6B5482;
-  --color-chart-gap:      #8B5A50;
+  /* Severity (design-tokens.json → severity). The base hue draws hairlines and
+     low-alpha tints; the -fg variant is the same level as text. */
+  --color-sev-high:      #FF7A6B;
+  --color-sev-medium:    #F2C14E;
+  --color-sev-low:       #66758B;
+  --color-sev-high-fg:   #FF7A6B;
+  --color-sev-medium-fg: #F2C14E;
+  --color-sev-low-fg:    #97A5B9;
 
-  /* Severity: the only place a semantic hue is justified. Muted.
-     The -fg variants are lifted so the label stays legible as TEXT on the dark
-     ground; the base hues are for hairlines and low-alpha tints only. */
-  --color-sev-high:      #7A2E35;
-  --color-sev-medium:    #7A5A2E;
-  --color-sev-low:       #4A5560;
-  --color-sev-high-fg:   #C98A90;
-  --color-sev-medium-fg: #C7A56B;
-  --color-sev-low-fg:    #98A4B0;
+  /* Health Score zones (design-tokens.json → zones); scoreColor() reads that
+     file directly. PulseLine's positive/negative segments share these. */
+  --color-success:      #3DE6D6;   /* excellent */
+  --color-zone-stable:  #6FCF97;   /* stable    */
+  --color-warning:      #F2C14E;   /* unstable  */
+  --color-danger:       #FF7A6B;   /* critical  */
 
-  /* Health Score zones, muted to the same loudness as everything else. These
-     mirror design-tokens.json → zones; scoreColor() reads that file directly.
-     PulseLine's positive/negative segments share these tokens deliberately. */
-  --color-success:      #3E6B52;   /* excellent */
-  --color-success-pale: #1A2320;
-  --color-warning:      #7A5A28;   /* unstable  */
-  --color-warning-pale: #241E16;
-  --color-danger:       #7A2E2E;   /* critical  */
-  --color-danger-pale:  #241819;
-  --color-zone-stable:  #5A6B3E;
-
-  /* Cards carry no fill — a hairline is the only edge. Shadows would read as
-     a light-theme convention on this ground, so they are removed. */
+  /* Cards carry a light fill (--color-surface) and a hairline; no shadow —
+     shadows would read as a light-theme convention on this ground. */
   --shadow-card:       none;
   --shadow-card-hover: none;
 
@@ -94,11 +85,13 @@
   --dur-hover: 200ms;
   --dur-press: 150ms;
   --press-scale: 0.98;
-  --fx-glow: rgba(107, 84, 130, 0.11);
-  --fx-grid: rgba(241, 238, 243, 0.04);
+  --fx-glow: rgba(61, 230, 214, 0.11);
+  --fx-glow-2: rgba(91, 157, 255, 0.11);
+  --fx-grid: rgba(232, 238, 246, 0.04);
   --fx-grid-size: 48px;
-  --fx-spotlight: rgba(148, 120, 176, 0.55);
+  --fx-spotlight: rgba(143, 243, 233, 0.55);
   --fx-spotlight-r: 200px;
+  --fx-selection: rgba(61, 230, 214, 0.28);
 }
 
 /* tabular-nums for all financial number displays */
@@ -138,23 +131,25 @@
 /* ── CSS variables (used by shadcn-style components) ── */
 @layer base {
   :root {
+    /* shadcn-style variables, in the hsl() component form those components
+       expect — the same palette, derived from design-tokens.json. */
     --radius: 3px;
-    --background: 260 12% 8%;
-    --foreground: 280 18% 94%;
-    --muted: 267 15% 14%;
-    --muted-foreground: 268 8% 55%;
-    --border: 268 16% 15%;
-    --ring: 275 22% 42%;
-    --primary: 275 22% 42%;
-    --primary-foreground: 280 18% 94%;
-    --secondary: 267 15% 14%;
-    --secondary-foreground: 280 18% 94%;
-    --destructive: 353 45% 33%;
-    --destructive-foreground: 280 18% 94%;
-    --card: 260 12% 8%;
-    --card-foreground: 280 18% 94%;
-    --accent: 267 15% 14%;
-    --accent-foreground: 280 18% 94%;
+    --background: 223 47% 3%;
+    --foreground: 214 44% 94%;
+    --muted: 220 47% 7%;
+    --muted-foreground: 215 20% 66%;
+    --border: 220 23% 10%;
+    --ring: 174 77% 57%;
+    --primary: 174 77% 57%;
+    --primary-foreground: 174 78% 7%;
+    --secondary: 220 47% 7%;
+    --secondary-foreground: 214 44% 94%;
+    --destructive: 6 100% 71%;
+    --destructive-foreground: 223 47% 3%;
+    --card: 220 47% 7%;
+    --card-foreground: 214 44% 94%;
+    --accent: 221 44% 10%;
+    --accent-foreground: 214 44% 94%;
   }
 }
 
@@ -163,10 +158,20 @@
     border-color: var(--color-line);
   }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--color-ground);
+    color: var(--color-fg);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background-color: var(--fx-selection);
+    color: var(--color-fg);
+  }
+  /* Keyboard focus in the accent. Components that draw their own ring
+     (focus-visible:ring-ring) override this; everything else still shows. */
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 2px;
   }
 }
 
@@ -310,4 +315,4 @@
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2E2836; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 3px; }

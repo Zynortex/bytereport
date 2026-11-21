@@ -1,8 +1,9 @@
 /**
- * Behind the hero: a very dark accent glow and a fine grid that fades out
- * toward the edges. Static — no drift, nothing to repaint. Both colours are
- * tokens (--fx-glow: #6B5482 at 11%, --fx-grid: primary text at 4%); the
- * masks are alpha only and paint nothing themselves.
+ * Behind the hero: two faint glows, the cyan accent and the chart blue (as in
+ * the ByteForge hero), and a fine grid that fades out toward the edges.
+ * Static — no drift, nothing to repaint. Every colour is a token (--fx-glow,
+ * --fx-glow-2: 11% opacity; --fx-grid: primary text at 4%); the masks are
+ * alpha only and paint nothing themselves.
  */
 export function HeroBackdrop() {
   return (
@@ -20,6 +21,10 @@ export function HeroBackdrop() {
       <div
         className="absolute inset-0"
         style={{ background: "radial-gradient(ellipse 50% 55% at 72% 42%, var(--fx-glow), transparent 72%)" }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{ background: "radial-gradient(ellipse 45% 50% at 18% 12%, var(--fx-glow-2), transparent 70%)" }}
       />
     </div>
   );

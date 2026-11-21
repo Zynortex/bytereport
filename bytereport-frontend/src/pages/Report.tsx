@@ -310,7 +310,7 @@ export default function Report() {
             </h3>
             <div className="grid md:grid-cols-2 gap-3">
               {keep("growth_opportunities", report.growth_opportunities).map((g, i) => (
-                <div key={i} className="rounded-xs border border-brand-border p-4">
+                <div key={i} className="rounded-xs border border-brand-border bg-surface p-4">
                   <p className="text-sm font-semibold text-brand-dark mb-1">{g.opportunity}</p>
                   <p className="text-xs text-brand-muted mb-2">{g.potential_impact}</p>
                   <p className="text-xs text-brand-dark">{g.action}</p>

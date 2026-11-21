@@ -29,7 +29,7 @@ Voice, text and photographed receipts become rows of a spreadsheet the same way.
 - **Cold start.** Heavy libraries (reportlab, matplotlib, openpyxl, pdfplumber) load on first use: process start → first `/health` answer went from 2.67 s to 1.63 s.
 - **Frontend performance.** Route-level code splitting and vendor chunks. Lighthouse performance, landing page, production build, median of three runs: **mobile 75 → 87, desktop 94 → 97**.
 - **Three languages.** Russian, Uzbek (Cyrillic) and English across the interface, the AI report, the PDF and the sample report.
-- **921 automated tests**, run with `AI_MOCK=1`: no API key, no spend.
+- **963 automated tests**, run with `AI_MOCK=1`: no API key, no spend.
 
 ## Architecture
 

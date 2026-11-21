@@ -32,7 +32,7 @@ export function ConfirmDialog({ open, title, text, confirmLabel, cancelLabel, bu
   if (!mounted) return null;
   return (
     <div
-      className={cn("fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4", closing ? "anim-fade-out" : "anim-fade-in")}
+      className={cn("fixed inset-0 z-50 flex items-center justify-center bg-ground/60 p-4", closing ? "anim-fade-out" : "anim-fade-in")}
       onClick={onCancel}
     >
       <div
@@ -40,7 +40,7 @@ export function ConfirmDialog({ open, title, text, confirmLabel, cancelLabel, bu
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby="confirm-text"
-        className={cn("bg-header border border-brand-border rounded-xs p-6 max-w-sm w-full", closing ? "anim-pop-out" : "anim-pop-in")}
+        className={cn("bg-surface border border-brand-border rounded-xs p-6 max-w-sm w-full", closing ? "anim-pop-out" : "anim-pop-in")}
         onClick={(e) => e.stopPropagation()}
       >
         <h3 id="confirm-title" className="text-base font-bold text-brand-dark mb-2">{title}</h3>

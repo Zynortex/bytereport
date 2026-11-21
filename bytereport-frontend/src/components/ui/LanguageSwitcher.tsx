@@ -46,7 +46,7 @@ export function LanguageSwitcher({ variant = "light" }: Props) {
         className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 max-md:min-h-11 max-md:px-2.5 rounded-lg text-sm font-medium transition-all select-none",
           isDark
-            ? "text-white/70 hover:text-white hover:bg-transparent/10 border border-transparent hover:border-white/20"
+            ? "text-fg/70 hover:text-fg hover:bg-transparent/10 border border-transparent hover:border-line-strong"
             : "text-brand-muted hover:text-brand-dark hover:bg-ground border border-transparent hover:border-brand-border"
         )}
         aria-haspopup="listbox"

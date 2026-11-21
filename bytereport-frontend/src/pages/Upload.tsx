@@ -255,7 +255,7 @@ export default function UploadPage() {
               i === step ? "text-brand-blue" : i < step ? "text-fg-subtle" : "text-brand-muted"
             }`}>
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                i === step ? "bg-brand-blue text-white" :
+                i === step ? "bg-brand-blue text-accent-ink" :
                 i < step ? "bg-line/40 text-fg-subtle" :
                 "bg-ground text-brand-muted"
               }`}>
@@ -356,7 +356,7 @@ export default function UploadPage() {
                       onClick={() => setBusinessInfo({ type: bt })}
                       className={`px-3 py-1.5 max-md:min-h-11 rounded-full text-xs font-medium border transition-colors duration-200 ease-out active:translate-y-px ${
                         businessInfo.type === bt
-                          ? "bg-brand-blue text-white border-brand-blue"
+                          ? "bg-brand-blue text-accent-ink border-brand-blue"
                           : "bg-transparent text-brand-muted border-brand-border hover:border-brand-blue"
                       }`}
                     >
@@ -385,7 +385,7 @@ export default function UploadPage() {
                       onClick={() => setBusinessInfo({ currency: c })}
                       className={`px-4 py-1.5 max-md:min-h-11 rounded-full text-xs font-bold border transition-colors duration-200 ease-out active:translate-y-px ${
                         businessInfo.currency === c
-                          ? "bg-brand-blue text-white border-brand-blue"
+                          ? "bg-brand-blue text-accent-ink border-brand-blue"
                           : "bg-transparent text-brand-muted border-brand-border hover:border-brand-blue"
                       }`}
                     >

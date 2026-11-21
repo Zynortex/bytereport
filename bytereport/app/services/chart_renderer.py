@@ -7,10 +7,11 @@ here. Each renderer returns PNG bytes, or None when the data needed for that
 chart is absent, so the PDF can simply skip a chart it cannot draw.
 
 Colours come from design-tokens.json (shared with the web app), never from
-matplotlib defaults:
-    revenue  → muted slate-blue
-    expenses → warm neutral (deliberately not red)
-    profit   → accent violet (the one accent in the chart)
+matplotlib defaults. The charts are printed on white, so:
+    profit   → the print accent (main series; the web cyan washes out on paper)
+    revenue  → blue (second series)
+    expenses → slate (deliberately not red)
+    negative → the print negative (a loss-making month, a cash gap)
 """
 
 from __future__ import annotations
@@ -35,18 +36,22 @@ logger = logging.getLogger(__name__)
 # changed there moves both surfaces together.
 from app.utils.category_mapper import category_label
 from app.services.design_tokens import (
-    CASH_GAP,
     CATEGORY_COLORS,
     PDF as PDF_TOKENS,
+    PRINT_ACCENT,
+    PRINT_NEGATIVE,
     RAMP,
     SERIES,
     assign_category_colors,
 )
 
-C_REVENUE  = SERIES["revenue"]     # muted slate-blue, base of the ramp
-C_EXPENSE  = SERIES["expenses"]    # warm neutral - deliberately NOT red
-C_PROFIT   = SERIES["profit"]      # the accent violet: the number that matters
-C_CASH_GAP = CASH_GAP              # muted terracotta, not pillar-box red
+# These charts are printed on white, so the main series and negatives take the
+# print palette (the web cyan and coral wash out on paper); revenue and
+# expenses are mid-tones that read on both grounds and stay shared with the web.
+C_REVENUE  = SERIES["revenue"]     # the second series: blue
+C_EXPENSE  = SERIES["expenses"]    # slate - deliberately NOT red
+C_PROFIT   = PRINT_ACCENT          # the main series: the accent, print strength
+C_CASH_GAP = PRINT_NEGATIVE        # negatives: brick, the print relative of the web coral
 
 C_INK      = PDF_TOKENS["page_ink"]
 C_MUTED    = PDF_TOKENS["page_muted"]
@@ -141,7 +146,9 @@ def render_monthly_bars(metrics: dict, labels: dict) -> Optional[bytes]:
     fig, ax = plt.subplots(figsize=(7.2, 3.0))
     ax.bar([i - width for i in x], revenue,  width, label=labels["chart_revenue"],  color=C_REVENUE)
     ax.bar(list(x),                expenses, width, label=labels["chart_expenses"], color=C_EXPENSE)
-    ax.bar([i + width for i in x], profit,   width, label=labels["chart_profit"],   color=C_PROFIT)
+    # A loss-making month is a negative value: the print negative, as on the web.
+    ax.bar([i + width for i in x], profit,   width, label=labels["chart_profit"],
+           color=[C_PROFIT if p >= 0 else C_CASH_GAP for p in profit])
 
     # Profit can be negative (a cash-gap month) — keep the zero line visible.
     if min(profit, default=0) < 0:
@@ -151,7 +158,13 @@ def render_monthly_bars(metrics: dict, labels: dict) -> Optional[bytes]:
     ax.set_xticklabels(months, fontsize=8)
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: _fmt_money(v)))
     _style_axes(ax)
-    ax.legend(frameon=False, fontsize=8, labelcolor=C_MUTED, ncol=3, loc="upper center",
+    # Explicit swatches: matplotlib would take the profit swatch from the first
+    # bar, so a loss in the first month would paint the legend's "profit" red.
+    from matplotlib.patches import Patch
+    ax.legend(handles=[Patch(color=C_REVENUE, label=labels["chart_revenue"]),
+                       Patch(color=C_EXPENSE, label=labels["chart_expenses"]),
+                       Patch(color=C_PROFIT, label=labels["chart_profit"])],
+              frameon=False, fontsize=8, labelcolor=C_MUTED, ncol=3, loc="upper center",
               bbox_to_anchor=(0.5, 1.16))
     return _finish(fig)
 

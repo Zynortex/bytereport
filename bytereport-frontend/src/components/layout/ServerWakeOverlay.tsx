@@ -40,7 +40,7 @@ export function ServerWakeOverlay() {
   const filled = failed ? 100 : Math.min(95, ((now - startedAt) / EXPECTED_WAKE_MS) * 100);
 
   return (
-    <div className={cn("fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4",
+    <div className={cn("fixed inset-0 z-[60] flex items-center justify-center bg-ground/60 p-4",
                        closing ? "anim-fade-out" : "anim-fade-in")}>
       <div
         role={failed ? "alertdialog" : "status"}
@@ -48,7 +48,7 @@ export function ServerWakeOverlay() {
         aria-modal={failed ? true : undefined}
         aria-labelledby="wake-title"
         aria-describedby="wake-text"
-        className={cn("w-full max-w-md border border-brand-border bg-header rounded-xs p-6",
+        className={cn("w-full max-w-md border border-brand-border bg-surface rounded-xs p-6",
                       closing ? "anim-pop-out" : "anim-pop-in")}
       >
         <div className="flex items-baseline justify-between gap-4 mb-2">

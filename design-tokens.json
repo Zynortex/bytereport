@@ -1,17 +1,25 @@
 {
-  "_comment": "Single source of truth for the ByteReport design language. Read by the web app (src/index.css mirrors these, src/lib/chartTokens.ts imports them) and by the PDF pipeline (app/services/design_tokens.py). Change a value here and both surfaces follow.",
+  "_comment": "Single source of truth for the ByteReport design language, shared with the ByteForge portfolio: a dark navy ground and one cyan accent. Read by the web app (src/index.css mirrors these, a test pins every value; src/lib/chartTokens.ts and motionTokens.ts import them) and by the PDF/Excel pipeline (app/services/design_tokens.py). Change a value here and both surfaces follow.",
   "theme": {
-    "bg_base": "#121016",
-    "bg_header": "#0D0B11",
-    "border_default": "#241F2B",
-    "accent": "#6B5482",
-    "text_primary": "#F1EEF3",
-    "text_muted": "#736C7E",
-    "text_subtle": "#8C8494",
+    "_comment": "The web, on a dark ground. accent_ink is the text on an accent fill (the primary button). Borders are translucent so they sit the same on the ground and on a card.",
+    "bg_base": "#04060B",
+    "bg_header": "#070B14",
+    "surface": "#0A101C",
+    "surface_hover": "#0E1524",
+    "border_default": "rgb(148 172 205 / 0.11)",
+    "border_strong": "rgb(148 172 205 / 0.20)",
+    "text_primary": "#E8EEF6",
+    "text_secondary": "#97A5B9",
+    "text_dim": "#66758B",
+    "accent": "#3DE6D6",
+    "accent_text": "#3DE6D6",
+    "accent_soft": "#8FF3E9",
+    "accent_ink": "#04201D",
+    "negative": "#FF7A6B",
     "radius": "3px"
   },
   "charts": {
-    "_comment": "Shared by web and PDF. `categories` is a hue-varied palette: a purely monochrome ramp was indistinguishable past ~4 slices. Colours are assigned by category NAME (see assign_category_colors), not by sort position, so a category keeps its colour between reports.",
+    "_comment": "Web charts, and the PDF charts for everything except the main series and negatives (see pdf). Main series = the accent, second = blue, negative = coral. `categories` is hue-varied (no violet); the last slot is the neutral reserved for 'Other'. Colours are assigned by category NAME (see assign_category_colors), not by sort position, so a category keeps its colour between reports.",
     "ramp": [
       "#1B2A40",
       "#22314A",
@@ -23,42 +31,62 @@
       "#B7C4D6"
     ],
     "series": {
-      "revenue": "#3E5578",
-      "expenses": "#6B5F55",
-      "profit": "#6B5482"
+      "revenue": "#5B9DFF",
+      "expenses": "#66758B",
+      "profit": "#3DE6D6"
     },
-    "cash_gap": "#8B5A50",
+    "cash_gap": "#FF7A6B",
     "categories": [
-      "#3E5578",
-      "#3E6B6B",
-      "#5A4569",
-      "#7A5A28",
-      "#7A4A3E",
-      "#5A6B3E",
-      "#6B6670"
+      "#2CC4B5",
+      "#5B9DFF",
+      "#4FC3F7",
+      "#6FCF97",
+      "#A8C97F",
+      "#F2C14E",
+      "#F29E7B",
+      "#66758B"
     ]
   },
   "severity": {
-    "_comment": "The one place a semantic (risk) colour is justified. Muted, but still separable - deliberately NOT part of the ramp above.",
-    "high": "#7A2E35",
-    "medium": "#7A5A2E",
-    "low": "#4A5560"
+    "_comment": "Risk levels on the web. The base hue draws hairlines and low-alpha tints; *_fg is the same level as text on the dark ground. Print versions live under pdf.severity.",
+    "high": "#FF7A6B",
+    "medium": "#F2C14E",
+    "low": "#66758B",
+    "high_fg": "#FF7A6B",
+    "medium_fg": "#F2C14E",
+    "low_fg": "#97A5B9"
   },
   "zones": {
-    "_comment": "Health Score zones. Ordered critical -> excellent and muted to the same loudness as the severity scale: the score is the most important number on the page, but its colour must not outshout the interface. Read by pdf_generator._ZONE_COLORS and by scoreColor() on the web.",
-    "critical": "#7A2E2E",
-    "unstable": "#7A5A28",
-    "stable": "#5A6B3E",
-    "excellent": "#3E6B52"
+    "_comment": "Health Score zones on the web, critical -> excellent: coral, amber, green, cyan. Read by scoreColor() and mirrored in index.css (success / warning / danger). Print versions live under pdf.zones.",
+    "critical": "#FF7A6B",
+    "unstable": "#F2C14E",
+    "stable": "#6FCF97",
+    "excellent": "#3DE6D6"
   },
   "pdf": {
-    "_comment": "The printed page stays light - a normal convention for a document, unlike the dark web dashboard.",
+    "_comment": "Everything that lands on white paper: the PDF report and the Excel export. The web accent #3DE6D6 is near-invisible on white, so each colour here is a darker relative of its web token that clears WCAG AA (4.5:1) against white as text - and white text on it, for table headers. A test pins the contrast.",
     "page_bg": "#FFFFFF",
     "page_ink": "#1E293B",
     "page_muted": "#5B6472",
     "page_grid": "#E2E5EA",
-    "header_bg": "#0D0B11",
-    "table_header_bg": "#6B5482"
+    "header_bg": "#070B14",
+    "accent": "#0D7D75",
+    "accent_tint": "#E8F5F3",
+    "negative_tint": "#FBEDEB",
+    "warning_tint": "#FBF5E6",
+    "neutral_tint": "#F1F3F5",
+    "negative": "#B94A3A",
+    "severity": {
+      "high": "#B94A3A",
+      "medium": "#8C6508",
+      "low": "#5B6472"
+    },
+    "zones": {
+      "critical": "#B94A3A",
+      "unstable": "#8C6508",
+      "stable": "#2B7C4C",
+      "excellent": "#0D7D75"
+    }
   },
   "motion": {
     "_comment": "Motion on the web (Motion library + CSS). One curve, ease-out with no overshoot: every y in [0,1]. Hover/press 150-250 ms, blocks appear in 400-700 ms. Under prefers-reduced-motion only fades remain (MotionConfig reducedMotion='user') and count-ups show the final value at once.",
@@ -79,11 +107,13 @@
     "hero_cycle_ms": 7000
   },
   "effects": {
-    "_comment": "Background and border effects. The only colour outside a stroke is the hero glow: accent #6B5482 at <= 12% opacity. The grid is primary text at 3-5%. No fills, no shadows, no glass.",
-    "glow": "rgba(107, 84, 130, 0.11)",
-    "grid_line": "rgba(241, 238, 243, 0.04)",
+    "_comment": "Background and highlight effects. The hero glows are the accent and the chart blue at 11% opacity, as in the ByteForge hero; the grid is primary text at 4%. selection is highlighted text.",
+    "glow": "rgba(61, 230, 214, 0.11)",
+    "glow_secondary": "rgba(91, 157, 255, 0.11)",
+    "grid_line": "rgba(232, 238, 246, 0.04)",
     "grid_size_px": 48,
-    "spotlight": "rgba(148, 120, 176, 0.55)",
-    "spotlight_radius_px": 200
+    "spotlight": "rgba(143, 243, 233, 0.55)",
+    "spotlight_radius_px": 200,
+    "selection": "rgba(61, 230, 214, 0.28)"
   }
 }

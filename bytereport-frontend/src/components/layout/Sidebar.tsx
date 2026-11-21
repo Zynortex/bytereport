@@ -52,16 +52,16 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
     // and does not scroll, so the sidebar fills it and stays put. Its <nav>
     // keeps overflow-y-auto for the case where menu items outgrow the column.
     <aside className={cn(
-      "flex flex-col h-full overflow-hidden bg-header border-r border-white/10 shrink-0",
+      "flex flex-col h-full overflow-hidden bg-header border-r border-line shrink-0",
       onClose ? "w-full" : "w-60"
     )}>
       {/* Logo */}
-      <div className="flex items-center border-b border-white/10">
+      <div className="flex items-center border-b border-line">
         <Link to="/" onClick={onClose} className="flex-1 flex items-center gap-2.5 px-6 py-5 hover:opacity-80 transition-opacity">
           <div className="w-7 h-7 rounded border border-accent/70 flex items-center justify-center">
             <BarChart2 size={14} className="text-accent" />
           </div>
-          <span className="text-white font-bold text-lg tracking-tight">ByteReport</span>
+          <span className="text-fg font-bold text-lg tracking-tight">ByteReport</span>
         </Link>
         {onClose && (
           <button
@@ -69,7 +69,7 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
             onClick={onClose}
             autoFocus
             aria-label={t("nav.close_menu")}
-            className="h-11 w-11 mr-2 flex items-center justify-center text-white/60 hover:text-white transition-colors duration-200 ease-out active:translate-y-px"
+            className="h-11 w-11 mr-2 flex items-center justify-center text-fg/60 hover:text-fg transition-colors duration-200 ease-out active:translate-y-px"
           >
             <X size={20} />
           </button>
@@ -84,10 +84,10 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
             to={to}
             onClick={onClose}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 max-md:min-h-11 rounded-lg text-sm font-medium transition-colors duration-200 ease-out active:bg-white/5",
+              "flex items-center gap-3 px-3 py-2.5 max-md:min-h-11 rounded-lg text-sm font-medium transition-colors duration-200 ease-out active:bg-fg/5",
               pathname === to
-                ? "bg-brand-blue/20 text-white font-semibold"
-                : "text-white/60 hover:text-white hover:bg-transparent/10"
+                ? "bg-brand-blue/12 text-fg font-semibold"
+                : "text-fg/60 hover:text-fg hover:bg-transparent/10"
             )}
           >
             <Icon size={16} />
@@ -100,9 +100,9 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
       {credits && (
         <div className="px-6 pb-3 text-xs">
           {credits.unlimited ? (
-            <span className="text-white/50">{t("credits.unlimited")}</span>
+            <span className="text-fg/50">{t("credits.unlimited")}</span>
           ) : (
-            <span className={isOutOfReports(credits) ? "text-sev-medium" : "text-white/50"}>
+            <span className={isOutOfReports(credits) ? "text-sev-medium" : "text-fg/50"}>
               {isOutOfReports(credits)
                 ? t(exhaustedKey(credits))
                 : t("credits.left", { count: credits.balance ?? 0 })}
@@ -112,7 +112,7 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
       )}
 
       {/* Language switcher */}
-      <div className="px-3 pb-2 border-t border-white/10 pt-3">
+      <div className="px-3 pb-2 border-t border-line pt-3">
         <div className="flex gap-1">
           {(["uz", "ru", "en"] as const).map((lang) => (
             <button
@@ -121,8 +121,8 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
               className={cn(
                 "flex-1 py-1.5 max-md:min-h-11 text-xs font-bold rounded-md transition-colors duration-200 ease-out active:translate-y-px",
                 i18n.language === lang
-                  ? "bg-brand-blue text-white"
-                  : "text-white/40 hover:text-white hover:bg-transparent/10"
+                  ? "bg-brand-blue text-accent-ink"
+                  : "text-fg/40 hover:text-fg hover:bg-transparent/10"
               )}
             >
               {lang.toUpperCase()}
@@ -134,18 +134,18 @@ export function Sidebar({ onClose }: SidebarProps = {}) {
       {/* User */}
       <div className="px-3 pb-4 pt-2">
         <div className="flex items-center gap-3 px-3 py-2 mb-2">
-          <div className="w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center text-white text-xs font-bold">
+          <div className="w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center text-accent-ink text-xs font-bold">
             {user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? "U"}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white text-xs font-medium truncate">{user?.name ?? user?.email}</p>
-            <p className="text-white/40 text-xs truncate">{user?.email}</p>
+            <p className="text-fg text-xs font-medium truncate">{user?.name ?? user?.email}</p>
+            <p className="text-fg/40 text-xs truncate">{user?.email}</p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start text-white/60 hover:text-white hover:bg-transparent/10"
+          className="w-full justify-start text-fg/60 hover:text-fg hover:bg-transparent/10"
           onClick={handleLogout}
         >
           <LogOut size={14} className="mr-2" />

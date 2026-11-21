@@ -15,7 +15,7 @@ export function RisksTable({ risks }: Props) {
           card with its fields stacked, in the same order as the columns. */}
       <div className="md:hidden space-y-2">
         {risks.map((r, i) => (
-          <div key={i} className="rounded-xs border border-brand-border p-4">
+          <div key={i} className="rounded-xs border border-brand-border bg-surface p-4">
             <div className="flex gap-3">
               <span className="mono-num text-brand-blue shrink-0">{i + 1}</span>
               <p className="text-sm font-medium text-brand-dark">{r.risk}</p>
@@ -36,7 +36,7 @@ export function RisksTable({ risks }: Props) {
       <div className="hidden md:block rounded-xl border border-brand-border overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-header text-white text-xs">
+            <tr className="bg-header text-fg text-xs">
               <th className="px-4 py-3 text-left w-6">#</th>
               <th className="px-4 py-3 text-left">{t("report.col_risk")}</th>
               <th className="px-4 py-3 text-left">{t("report.col_impact")}</th>

@@ -79,7 +79,7 @@ export function HeroReport() {
       initial={{ opacity: 0, y: REVEAL_OFFSET }}
       animate={go ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: DUR.reveal, ease: EASE }}
-      className="relative w-full max-w-[30rem] rounded-xs border border-brand-border bg-header p-5 sm:p-6"
+      className="relative w-full max-w-[30rem] rounded-xs border border-brand-border bg-surface p-5 sm:p-6"
       aria-label={t("landing.ex_eyebrow")}
     >
       <div className="flex items-baseline justify-between gap-3">

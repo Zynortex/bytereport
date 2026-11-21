@@ -82,7 +82,7 @@ export default function Pricing() {
                 key={p.id}
                 className={cn(
                   "rounded-xs border p-6 sm:p-7 flex flex-col",
-                  paid ? "bg-header border-brand-border" : "border-brand-border"
+                  paid ? "bg-surface-hover border-line-strong" : "bg-surface border-brand-border"
                 )}
               >
                 <p className="label-caps text-xs text-brand-muted mb-3">{t(`pricing.plan.${p.id}.name`)}</p>

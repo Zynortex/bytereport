@@ -83,17 +83,17 @@ export default function Auth() {
           <div className="w-7 h-7 rounded border border-accent/70 flex items-center justify-center">
             <BarChart2 size={14} className="text-accent" />
           </div>
-          <span className="text-white font-bold text-lg">ByteReport</span>
+          <span className="text-fg font-bold text-lg">ByteReport</span>
         </Link>
         <div>
-          <div className="text-5xl font-black text-white leading-tight mb-4">
+          <div className="text-5xl font-black text-fg leading-tight mb-4">
             {t("auth.tagline")}
           </div>
-          <p className="text-white/50 text-base leading-relaxed max-w-sm">
+          <p className="text-fg/50 text-base leading-relaxed max-w-sm">
             {t("auth.tagline_sub")}
           </p>
         </div>
-        <p className="text-white/20 text-sm">{t("auth.copyright", { year: new Date().getFullYear() })}</p>
+        <p className="text-fg/20 text-sm">{t("auth.copyright", { year: new Date().getFullYear() })}</p>
       </div>
 
       {/* Right panel */}

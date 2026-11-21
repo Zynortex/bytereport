@@ -50,7 +50,7 @@ function ExampleReading() {
   }, []);
 
   return (
-    <div ref={ref} className="rounded-xs border border-brand-border p-6 sm:p-8">
+    <div ref={ref} className="rounded-xs border border-brand-border bg-surface p-6 sm:p-8">
       <div className="flex items-baseline justify-between mb-1">
         <p className="text-xs font-semibold uppercase tracking-widest text-brand-muted">{t("landing.ex_eyebrow")}</p>
         <span className="text-xs text-brand-muted">{t("landing.ex_period")}</span>

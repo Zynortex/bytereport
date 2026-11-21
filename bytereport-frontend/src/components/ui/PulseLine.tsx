@@ -142,7 +142,7 @@ export function PulseLine({
             <circle
               cx={px(maxIdx)} cy={py(maxNet)} r={DOT_R}
               fill="var(--color-accent)"
-              stroke="var(--color-base)" strokeWidth={1.5}
+              stroke="var(--color-ground)" strokeWidth={1.5}
               filter={`url(#${uid}-glow)`}
             />
           </g>

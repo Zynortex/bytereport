@@ -25,7 +25,7 @@ export function SpotlightCard({ children, className }: { children: React.ReactNo
       ref={ref}
       onPointerMove={onMove}
       className={cn(
-        "group relative rounded-xs border border-brand-border transition-colors duration-[var(--dur-hover)] ease-out hover:border-accent",
+        "group relative rounded-xs border border-brand-border bg-surface transition-colors duration-[var(--dur-hover)] ease-out hover:border-accent",
         className
       )}
     >

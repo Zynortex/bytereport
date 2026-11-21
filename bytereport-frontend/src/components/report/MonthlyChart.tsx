@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip,
   Legend, ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CHART_UI, SERIES } from "@/lib/chartTokens";
+import { CASH_GAP, CHART_UI, SERIES } from "@/lib/chartTokens";
 import { CHART_ANIM_MS, CHART_STAGGER_MS, useReducedMotion } from "@/lib/motion";
 import { formatCompact, formatCurrency } from "@/lib/utils";
 import type { MonthMetrics } from "@/types";
@@ -44,7 +44,10 @@ export function MonthlyChart({ data, currency = "UZS" }: Props) {
             <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
             <Bar dataKey="revenue"  name={t("report.revenue")}  fill={SERIES.revenue} radius={[1, 1, 0, 0]} {...anim(0)} />
             <Bar dataKey="expenses" name={t("report.expenses")}  fill={SERIES.expenses} radius={[1, 1, 0, 0]} {...anim(1)} />
-            <Bar dataKey="profit"   name={t("report.profit")}  fill={SERIES.profit} radius={[1, 1, 0, 0]} {...anim(2)} />
+            {/* A loss-making month is a negative value: coral, like every negative. */}
+            <Bar dataKey="profit"   name={t("report.profit")}  fill={SERIES.profit} radius={[1, 1, 0, 0]} {...anim(2)}>
+              {data.map((m) => <Cell key={m.month} fill={m.profit < 0 ? CASH_GAP : SERIES.profit} />)}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

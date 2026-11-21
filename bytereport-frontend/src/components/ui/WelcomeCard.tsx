@@ -75,7 +75,7 @@ export function WelcomeCard() {
       // needed — and unlike one, it cannot fire on a click that was really
       // meant for something underneath.
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60",
+        "fixed inset-0 z-50 flex items-center justify-center p-4 bg-ground/60",
         closing ? "anim-fade-out" : "anim-fade-in"
       )}
       onClick={dismiss}
@@ -86,7 +86,7 @@ export function WelcomeCard() {
         aria-label={t("welcome.title")}
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          "w-full max-w-md bg-header border border-brand-border rounded-xs p-6",
+          "w-full max-w-md bg-surface border border-brand-border rounded-xs p-6",
           closing ? "anim-pop-out" : "anim-pop-in"
         )}
       >

@@ -21,7 +21,12 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 from app.models.voice_note import MIN_RECORDS_FOR_ANALYSIS, DraftTransaction
-from app.services.design_tokens import ACCENT, PDF
+from app.services.design_tokens import (
+    PDF,
+    PRINT_ACCENT,
+    PRINT_SEVERITY,
+    PRINT_WARNING_TINT,
+)
 
 LABELS: dict[str, dict[str, str]] = {
     "ru": {
@@ -88,7 +93,7 @@ LABELS: dict[str, dict[str, str]] = {
 
 def _rgb(hex_colour: str) -> str:
     """
-    '#6B5482' -> 'FF6B5482'.
+    '#0D7D75' -> 'FF0D7D75'.
 
     OOXML colours are ARGB, and the alpha byte is load-bearing. Handing
     openpyxl a bare six-digit RGB makes it pad to eight with a LEADING ZERO
@@ -103,10 +108,14 @@ def _rgb(hex_colour: str) -> str:
     return "FF" + hex_colour.lstrip("#").upper()[-6:]
 
 
-_INK = _rgb(PDF.get("page_ink", "#1E293B"))
-_MUTED = _rgb(PDF.get("page_muted", "#5B6472"))
-_GRID = _rgb(PDF.get("page_grid", "#E2E5EA"))
-_HEADER_BG = _rgb(ACCENT)
+_INK = _rgb(PDF["page_ink"])
+_MUTED = _rgb(PDF["page_muted"])
+_GRID = _rgb(PDF["page_grid"])
+# The sheet is paper: the print accent, which also carries white header text at 4.5:1+.
+_HEADER_BG = _rgb(PRINT_ACCENT)
+_HEADER_INK = _rgb(PDF["page_bg"])
+_CHECK_INK = _rgb(PRINT_SEVERITY["medium"])
+_CHECK_FILL = _rgb(PRINT_WARNING_TINT)
 
 _HAIRLINE = Side(style="thin", color=_GRID)
 _BORDER = Border(left=_HAIRLINE, right=_HAIRLINE, top=_HAIRLINE, bottom=_HAIRLINE)
@@ -188,7 +197,7 @@ def generate_excel(
     header_row = 4
     for i, key in enumerate(_COLUMNS, start=1):
         cell = ws.cell(row=header_row, column=i, value=labels[key])
-        cell.font = Font(bold=True, size=10, color=_rgb("#FFFFFF"))
+        cell.font = Font(bold=True, size=10, color=_HEADER_INK)
         cell.fill = PatternFill("solid", fgColor=_HEADER_BG)
         cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         cell.border = _BORDER
@@ -225,9 +234,9 @@ def generate_excel(
 
         check = ws.cell(row=r, column=6, value=_review_note(row, labels))
         if row.uncertain:
-            check.font = Font(size=9, color=_rgb("#7A5A28"))
+            check.font = Font(size=9, color=_CHECK_INK)
             for col in range(1, ncols + 1):
-                ws.cell(row=r, column=col).fill = PatternFill("solid", fgColor=_rgb("#FBF6EC"))
+                ws.cell(row=r, column=col).fill = PatternFill("solid", fgColor=_CHECK_FILL)
 
         for col in range(1, ncols + 1):
             cell = ws.cell(row=r, column=col)

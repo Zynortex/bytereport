@@ -1,5 +1,5 @@
 """
-The landing comes alive without leaving the style: black ground, dark violet
+The landing comes alive without leaving the style: navy ground, cyan
 lines, 3px radius, mono figures — and every new duration, curve and effect
 colour written down once, in design-tokens.json.
 """
@@ -23,10 +23,14 @@ def _rgba(value: str) -> tuple[int, int, int, float]:
 
 # ── Tokens ──────────────────────────────────────────────────────────────────
 
-def test_the_glow_is_the_accent_and_very_dark():
+def test_the_glows_are_the_accent_and_the_chart_blue_and_faint():
+    """Cyan and blue, as in the ByteForge hero, at the old 11% opacity."""
     r, g, b, a = _rgba(TOKENS["effects"]["glow"])
     assert "#%02X%02X%02X" % (r, g, b) == TOKENS["theme"]["accent"].upper()
     assert a <= 0.12
+    r, g, b, a2 = _rgba(TOKENS["effects"]["glow_secondary"])
+    assert "#%02X%02X%02X" % (r, g, b) == TOKENS["charts"]["series"]["revenue"].upper()
+    assert a2 == a
 
 
 def test_the_grid_is_faint():
@@ -54,7 +58,9 @@ def test_the_css_mirror_matches_the_file():
     mo, fx = TOKENS["motion"], TOKENS["effects"]
     expected = {
         "--dur-hover": f"{mo['hover_ms']}ms", "--dur-press": f"{mo['press_ms']}ms",
-        "--press-scale": str(mo["press_scale"]), "--fx-glow": fx["glow"], "--fx-grid": fx["grid_line"],
+        "--press-scale": str(mo["press_scale"]), "--fx-glow": fx["glow"],
+        "--fx-glow-2": fx["glow_secondary"], "--fx-grid": fx["grid_line"],
+        "--fx-selection": fx["selection"],
         "--fx-grid-size": f"{fx['grid_size_px']}px", "--fx-spotlight": fx["spotlight"],
         "--fx-spotlight-r": f"{fx['spotlight_radius_px']}px",
     }

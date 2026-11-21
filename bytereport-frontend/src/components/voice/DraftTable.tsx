@@ -166,7 +166,7 @@ export function DraftTable({ rows, onChange, currency, disabled = false }: Props
           amount — the field the user most needs to check. */}
       <div className="md:hidden space-y-3">
         {rows.map((row, i) => (
-          <div key={i} className="border border-brand-border rounded-xs p-3 space-y-3">
+          <div key={i} className="border border-brand-border bg-surface rounded-xs p-3 space-y-3">
             <div className="flex items-center justify-between gap-2">
               <span className="label-caps text-[10px] text-brand-muted">#{i + 1}</span>
               {deleteButton(i)}

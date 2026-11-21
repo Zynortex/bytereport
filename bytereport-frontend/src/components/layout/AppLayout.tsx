@@ -90,7 +90,7 @@ export function AppLayout() {
       {drawerMounted && (
         <div className="md:hidden">
           <div
-            className={cn("fixed inset-0 z-40 bg-black/60", drawerClosing ? "anim-fade-out" : "anim-fade-in")}
+            className={cn("fixed inset-0 z-40 bg-ground/60", drawerClosing ? "anim-fade-out" : "anim-fade-in")}
             onClick={() => setMenuOpen(false)}
             aria-hidden="true"
           />

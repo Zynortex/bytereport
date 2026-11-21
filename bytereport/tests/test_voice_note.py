@@ -291,11 +291,13 @@ def test_business_name_becomes_the_title():
 
 
 def test_workbook_colours_come_from_the_shared_token_file():
-    from app.services.design_tokens import ACCENT
+    """The sheet is paper: the header takes the PRINT accent (the web cyan is
+    near-invisible on white)."""
+    from app.services.design_tokens import PRINT_ACCENT
 
     wb, _ = _sheet()
     header_fill = wb.active.cell(row=4, column=1).fill.fgColor.rgb
-    assert ACCENT.lstrip("#").upper() in header_fill
+    assert PRINT_ACCENT.lstrip("#").upper() in header_fill
 
 
 # ── The "assumed today" guard ───────────────────────────────────────────────

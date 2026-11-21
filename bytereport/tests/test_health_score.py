@@ -175,17 +175,20 @@ def _color_hex(c) -> str:
     )
 
 
-# Expected: (score, status_key, hex). Both surfaces read design-tokens.json →
-# zones, so these values are the single source, not a mirrored copy.
+# Expected: (score, status_key). The PDF prints the score on white, so its
+# colour is the PRINT zone from design-tokens.json → pdf.zones (the web reads
+# zones); the colour is looked up there, not mirrored here.
+from app.services.design_tokens import PRINT_ZONES as _PZ
+
 _SCORE_COLOR_CASES = [
-    (0,   "critical",  "#7a2e2e"),
-    (39,  "critical",  "#7a2e2e"),
-    (40,  "unstable",  "#7a5a28"),
-    (54,  "unstable",  "#7a5a28"),
-    (55,  "stable",    "#5a6b3e"),
-    (69,  "stable",    "#5a6b3e"),
-    (70,  "excellent", "#3e6b52"),
-    (100, "excellent", "#3e6b52"),
+    (0,   "critical",  _PZ["critical"].lower()),
+    (39,  "critical",  _PZ["critical"].lower()),
+    (40,  "unstable",  _PZ["unstable"].lower()),
+    (54,  "unstable",  _PZ["unstable"].lower()),
+    (55,  "stable",    _PZ["stable"].lower()),
+    (69,  "stable",    _PZ["stable"].lower()),
+    (70,  "excellent", _PZ["excellent"].lower()),
+    (100, "excellent", _PZ["excellent"].lower()),
 ]
 
 @pytest.mark.parametrize("score,expected_key,expected_hex", _SCORE_COLOR_CASES)
@@ -202,14 +205,14 @@ def test_score_color_73_regression():
     # Before fix: _score_color(73) returned the amber SCORE_STABLE of the 5-zone system
     # After fix:  must return the excellent zone colour
     assert score_to_status_key(73) == "excellent"
-    assert _color_hex(_score_color(73)) == "#3e6b52"
+    assert _color_hex(_score_color(73)) == _PZ["excellent"].lower()
 
 
 def test_old_5zone_amber_no_longer_used():
     """score=68 (was SCORE_STABLE amber in old 5-zone) must now be stable/lime."""
     from app.services.pdf_generator import _score_color
     assert score_to_status_key(68) == "stable"
-    assert _color_hex(_score_color(68)) == "#5a6b3e"
+    assert _color_hex(_score_color(68)) == _PZ["stable"].lower()
 
 
 # ── nova_digital fixture regression tests (Задача 3.2) ───────────────────────
@@ -296,12 +299,7 @@ def test_nova_score_color_backend_pdf_agree():
     m = compute_metrics(clean)
     score = m.health_score
     key = score_to_status_key(score)
-    _ZONE_HEX = {
-        "critical":  "#7a2e2e",
-        "unstable":  "#7a5a28",
-        "stable":    "#5a6b3e",
-        "excellent": "#3e6b52",
-    }
+    _ZONE_HEX = {k: v.lower() for k, v in _PZ.items()}
     assert _color_hex(_score_color(score)) == _ZONE_HEX[key], (
         f"score={score} key={key!r}: PDF color {_color_hex(_score_color(score))!r}"
         f" != expected {_ZONE_HEX[key]!r}"

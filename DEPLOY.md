@@ -51,7 +51,7 @@
    - сборка: `pip install -r bytereport/requirements.txt`;
    - старт: `cd bytereport && uvicorn main:app --host 0.0.0.0 --port $PORT`;
    - проверка здоровья: `/health`;
-   - тариф Free, регион Frankfurt;
+   - тариф Free, регион Singapore;
    - `ENVIRONMENT=production`: CORS пускает только адреса из `ALLOWED_ORIGINS`. Локально по умолчанию `development`, и там подходит любой порт localhost.
 3. Render попросит значения переменных. Где их взять:
 

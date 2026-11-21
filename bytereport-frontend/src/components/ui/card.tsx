@@ -3,12 +3,12 @@ import { cn } from "@/lib/utils";
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    // Cards are hairline-only; the hover state is a border-colour lift, so it
-    // needs a transition or it snaps. No shadow, no scale.
+    // Cards: the surface fill and a hairline. The hover state is a colour
+    // lift, so it needs a transition or it snaps. No shadow, no scale.
     <div
       ref={ref}
       className={cn(
-        "rounded-xs border border-brand-border bg-transparent",
+        "rounded-xs border border-brand-border bg-surface",
         "transition-colors duration-200 ease-out",
         className
       )}

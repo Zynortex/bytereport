@@ -41,15 +41,15 @@ function fmtShort(n: number): string {
 }
 
 // ── KPI card ───────────────────────────────────────────────────────────────
-type CardColor = "blue" | "red" | "green" | "amber" | "purple";
+type CardColor = "blue" | "red" | "green" | "amber" | "accent";
 function ResultCard({
   label, value, sub, icon: Icon, color = "blue",
 }: {
   label: string; value: string; sub?: string;
   icon: React.ElementType; color?: CardColor;
 }) {
-  const bg  = { blue: "bg-line/40",   red: "bg-sev-high/15",   green: "bg-line/40", amber: "bg-sev-medium/15",  purple: "bg-line/40"  }[color];
-  const clr = { blue: "text-brand-blue", red: "text-sev-high", green: "text-fg-subtle", amber: "text-sev-medium", purple: "text-accent" }[color];
+  const bg  = { blue: "bg-line/40",   red: "bg-sev-high/15",   green: "bg-line/40", amber: "bg-sev-medium/15",  accent: "bg-line/40"  }[color];
+  const clr = { blue: "text-brand-blue", red: "text-sev-high", green: "text-fg-subtle", amber: "text-sev-medium", accent: "text-accent" }[color];
   return (
     <Card>
       <CardContent className="pt-5 pb-5">

@@ -113,7 +113,7 @@ export function AIChatPanel({ open, onClose, metrics, report, businessInfo }: Pr
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 md:hidden anim-fade-in"
+        className="fixed inset-0 bg-ground/50 z-40 md:hidden anim-fade-in"
         onClick={onClose}
       />
 

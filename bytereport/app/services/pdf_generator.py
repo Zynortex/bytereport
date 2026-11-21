@@ -52,7 +52,16 @@ from app.services.ai_text import humanize
 from app.services.report_copy import breakdown_lines, copy_text, format_points, score_copy
 from app.services.report_layout import LIST_BLOCKS, ReportLayout
 from app.utils.category_mapper import category_label
-from app.services.design_tokens import ACCENT, PDF as PDF_TOKENS, SEVERITY, ZONES
+from app.services.design_tokens import (
+    PDF as PDF_TOKENS,
+    PRINT_ACCENT,
+    PRINT_ACCENT_TINT,
+    PRINT_NEGATIVE_TINT,
+    PRINT_NEUTRAL_TINT,
+    PRINT_SEVERITY,
+    PRINT_ZONES,
+    THEME,
+)
 from app.services.financial_engine import score_to_status_key
 
 logger = logging.getLogger(__name__)
@@ -140,23 +149,29 @@ FONT_REGULAR, FONT_BOLD = _register_fonts()
 # ---------------------------------------------------------------------------
 
 # All from design-tokens.json — the same file the web app reads.
+# Paper gets the print palette (design-tokens.json -> pdf): the web accent is
+# near-invisible on white, so headings and table headers use its darker
+# relative, which clears 4.5:1 against white both as text and under white text.
 BRAND_DARK   = colors.HexColor(PDF_TOKENS["header_bg"])   # dark band on a light page
-BRAND_BLUE   = colors.HexColor(ACCENT)                    # the single accent
-BRAND_LIGHT  = colors.HexColor("#F7F6F8")                 # faint tint of the accent
+BRAND_BLUE   = colors.HexColor(PRINT_ACCENT)              # the single accent, print strength
+BRAND_LIGHT  = colors.HexColor(PRINT_ACCENT_TINT)         # faint tint of the accent
 BRAND_BORDER = colors.HexColor(PDF_TOKENS["page_grid"])
+# Text on the dark cover band: the web's secondary and dim text, made for a dark ground.
+ON_DARK_SECONDARY = colors.HexColor(THEME["text_secondary"])
+ON_DARK_DIM       = colors.HexColor(THEME["text_dim"])
 
 # Severity is the ONE place a semantic colour earns its keep. Muted so it does
 # not shout, but still three clearly separable hues — and deliberately outside
 # the categorical ramp, which must never imply risk.
-SEV_HIGH   = colors.HexColor(SEVERITY["high"])     # dark ruby
-SEV_MEDIUM = colors.HexColor(SEVERITY["medium"])   # ochre
-SEV_LOW    = colors.HexColor(SEVERITY["low"])      # slate
+SEV_HIGH   = colors.HexColor(PRINT_SEVERITY["high"])     # brick
+SEV_MEDIUM = colors.HexColor(PRINT_SEVERITY["medium"])   # dark ochre
+SEV_LOW    = colors.HexColor(PRINT_SEVERITY["low"])      # slate
 
 # 4-zone score colours. Both this and the web scoreColor() now read the SAME
 # entry in design-tokens.json, so the two can no longer drift — they were
 # previously two independent hardcoded copies.
 _ZONE_COLORS: dict[str, colors.Color] = {
-    key: colors.HexColor(ZONES[key])
+    key: colors.HexColor(PRINT_ZONES[key])
     for key in ("critical", "unstable", "stable", "excellent")
 }
 
@@ -330,9 +345,9 @@ def _styles() -> dict:
         "cover_title": ps("cover_title", bold=True,
             fontSize=28, textColor=colors.white, alignment=TA_LEFT, leading=34),
         "cover_sub": ps("cover_sub",
-            fontSize=12, textColor=colors.HexColor("#B3AAC0"), alignment=TA_LEFT, leading=16),
+            fontSize=12, textColor=ON_DARK_SECONDARY, alignment=TA_LEFT, leading=16),
         "cover_meta": ps("cover_meta",
-            fontSize=9, textColor=colors.HexColor("#8C8494"), alignment=TA_LEFT),
+            fontSize=9, textColor=ON_DARK_DIM, alignment=TA_LEFT),
         "section_header": ps("section_header", bold=True,
             fontSize=13, textColor=BRAND_DARK, spaceBefore=14, spaceAfter=6, leading=16),
         "body": ps("body",
@@ -397,7 +412,7 @@ class _BrandedPage(PageTemplate):
         canvas.setFont(FONT_BOLD, 10)
         canvas.drawString(MARGIN, PAGE_H - 9.5 * mm, "ByteReport")
         canvas.setFont(FONT_REGULAR, 8)
-        canvas.setFillColor(colors.HexColor("#B3AAC0"))
+        canvas.setFillColor(ON_DARK_SECONDARY)
         canvas.drawRightString(
             PAGE_W - MARGIN, PAGE_H - 9.5 * mm,
             f"AI Financial Report  •  {doc.report_meta.get('business_name', '')}",
@@ -644,7 +659,7 @@ def _build_opportunities(report: AIReport, st: dict, labels: dict) -> list:
             Paragraph(o.action, st["table_cell"]),
         ])
     t = Table(data, colWidths=[col_w * 0.28, col_w * 0.22, col_w * 0.5])
-    t.setStyle(_base_table_style(header_bg=colors.HexColor(ACCENT)))
+    t.setStyle(_base_table_style(header_bg=BRAND_BLUE))
     return [*_section_title(labels["growth_opps"], st), t, Spacer(1, 6 * mm)]
 
 
@@ -720,8 +735,8 @@ def _build_expense_analysis(
             Paragraph(labels["efficient_cats"], _ps("hdr_g", bold=True, fontSize=8.5, textColor=SEV_LOW)),
         ],
         [
-            _pill_list(ea.problem_categories,  colors.HexColor("#F6F1F2")),
-            _pill_list(ea.efficient_categories, colors.HexColor("#F1F3F4")),
+            _pill_list(ea.problem_categories,  colors.HexColor(PRINT_NEGATIVE_TINT)),
+            _pill_list(ea.efficient_categories, colors.HexColor(PRINT_NEUTRAL_TINT)),
         ],
     ], colWidths=[col_w, col_w])
     grid.setStyle(TableStyle([
@@ -772,8 +787,8 @@ def _build_anomalies(report: AIReport, st: dict, labels: dict) -> list:
     _sev_w = 26 * mm
     t = Table(data, colWidths=[_sev_w, col_w * 0.18, col_w * 0.22,
                                col_w * 0.5 - (_sev_w - 16 * mm)])
-    # was #7C3AED: a library default unrelated to the brand.
-    t.setStyle(_base_table_style(header_bg=colors.HexColor(ACCENT)))
+    # The print accent, like every other table header (not a library default).
+    t.setStyle(_base_table_style(header_bg=BRAND_BLUE))
     return [*_section_title(labels["anomalies"], st), t, Spacer(1, 6 * mm)]
 
 

@@ -172,14 +172,20 @@ def test_donut_palette_has_no_semantic_traffic_light_colours():
     assert not (upper & banned), f"semantic colours leaked in: {upper & banned}"
 
 
-def test_donut_palette_is_muted_across_all_hues():
+def test_donut_palette_is_the_token_palette_without_violet():
     """
-    The palette is now hue-varied (a monochrome ramp was unreadable past ~4
-    slices), so the constraint is loudness, not hue: nothing may shout.
+    Hue-varied (a monochrome ramp was unreadable past ~4 slices), taken from
+    design-tokens.json, and in tune with the cyan/blue palette: no violet.
     """
+    import colorsys
+
+    from app.services.design_tokens import CATEGORY_COLORS
+
+    assert cr.DONUT_COLORS == CATEGORY_COLORS
     for c in cr.DONUT_COLORS:
-        r, g, b = int(c[1:3], 16), int(c[3:5], 16), int(c[5:7], 16)
-        assert max(r, g, b) < 0xA0, f"{c} is louder than the muted interface"
+        r, g, b = (int(c[i:i + 2], 16) / 255 for i in (1, 3, 5))
+        h, _l, s = colorsys.rgb_to_hls(r, g, b)
+        assert not (s > 0.15 and 250 <= h * 360 <= 320), f"{c} is violet"
 
 
 def test_donut_still_renders():
